@@ -1,0 +1,17 @@
+html,
+body,
+ol { margin: 0; padding: 0; }
+body { font: 14px/20px Helvetica, Arial, sans-serif; }
+#container { margin: 20px auto 0; width: 600px; }
+.forms { list-style: none; }
+em.error {
+  clear: both;
+  color: #f00;
+  display: block;
+  font-size: 12px;
+  margin: 5px 0 0 185px;
+}
+root { 
+    display: block;
+}
+

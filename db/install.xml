@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/placement/db" VERSION="20120809" COMMENT="XMLDB file for Moodle local/placement"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="local_placement" COMMENT="Default comment for local_placement, please edit me" NEXT="placement_school">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="placement_school" COMMENT="A list of french schools that participate in the student teacher program" PREVIOUS="local_placement" NEXT="placement_schoolboard">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="school"/>
+        <FIELD NAME="school" TYPE="char" LENGTH="1333" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="address"/>
+        <FIELD NAME="address" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="school" NEXT="city"/>
+        <FIELD NAME="city" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="address" NEXT="province"/>
+        <FIELD NAME="province" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="city" NEXT="postalcode"/>
+        <FIELD NAME="postalcode" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="province" NEXT="phone"/>
+        <FIELD NAME="phone" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="postalcode" NEXT="fax"/>
+        <FIELD NAME="fax" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="phone" NEXT="email"/>
+        <FIELD NAME="email" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="fax" NEXT="principallastname"/>
+        <FIELD NAME="principallastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="email" NEXT="principalfirstname"/>
+        <FIELD NAME="principalfirstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="principallastname" NEXT="contactlastname"/>
+        <FIELD NAME="contactlastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="principalfirstname" NEXT="contactfirstname"/>
+        <FIELD NAME="contactfirstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="contactlastname" NEXT="contactsex"/>
+        <FIELD NAME="contactsex" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="contactfirstname" NEXT="contactlang"/>
+        <FIELD NAME="contactlang" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="contactsex" NEXT="schoolboard"/>
+        <FIELD NAME="schoolboard" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="contactlang" NEXT="website"/>
+        <FIELD NAME="website" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolboard" NEXT="zone"/>
+        <FIELD NAME="zone" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="website" NEXT="schoolid"/>
+        <FIELD NAME="schoolid" TYPE="int" LENGTH="20" NOTNULL="true" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" PREVIOUS="zone" NEXT="principalsex"/>
+        <FIELD NAME="principalsex" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolid" NEXT="principallang"/>
+        <FIELD NAME="principallang" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="principalsex" NEXT="principalphone"/>
+        <FIELD NAME="principalphone" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="principallang" NEXT="contactphone"/>
+        <FIELD NAME="contactphone" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="principalphone" NEXT="contactemail"/>
+        <FIELD NAME="contactemail" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="contactphone" NEXT="program"/>
+        <FIELD NAME="program" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="contactemail"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="placement_schoolboard" COMMENT="A list of schoolboards around Alberta" PREVIOUS="placement_school" NEXT="placement_initial">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="1333" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="placement_initial" COMMENT="A list of Campus Saint-Jean student teachers in the initial EDU E 331 stage" PREVIOUS="placement_schoolboard" NEXT="placement_supervisor">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="student_teacher_id"/>
+        <FIELD NAME="student_teacher_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="id" NEXT="lastname"/>
+        <FIELD NAME="lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="student_teacher_id" NEXT="firstname"/>
+        <FIELD NAME="firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="lastname" NEXT="category"/>
+        <FIELD NAME="category" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="firstname" NEXT="phone"/>
+        <FIELD NAME="phone" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="category" NEXT="email"/>
+        <FIELD NAME="email" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="phone" NEXT="type"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="email" NEXT="program"/>
+        <FIELD NAME="program" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="type" NEXT="stage"/>
+        <FIELD NAME="stage" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="program" NEXT="schoolboard"/>
+        <FIELD NAME="schoolboard" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="stage" NEXT="supervisor"/>
+        <FIELD NAME="supervisor" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolboard" NEXT="semester"/>
+        <FIELD NAME="semester" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="supervisor" NEXT="school"/>
+        <FIELD NAME="school" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="semester" NEXT="coop_teacher_id"/>
+        <FIELD NAME="coop_teacher_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="school" NEXT="supervisor_id"/>
+        <FIELD NAME="supervisor_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="coop_teacher_id" NEXT="minor"/>
+        <FIELD NAME="minor" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="supervisor_id" NEXT="major"/>
+        <FIELD NAME="major" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="minor" NEXT="schoolid"/>
+        <FIELD NAME="schoolid" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="major" NEXT="coop_lastname"/>
+        <FIELD NAME="coop_lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolid" NEXT="coop_firstname"/>
+        <FIELD NAME="coop_firstname" TYPE="char" LENGTH="133" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop_lastname" NEXT="schoolyear"/>
+        <FIELD NAME="schoolyear" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop_firstname" NEXT="vehicle"/>
+        <FIELD NAME="vehicle" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolyear" NEXT="coop2_id"/>
+        <FIELD NAME="coop2_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="vehicle" NEXT="coop2_lastname"/>
+        <FIELD NAME="coop2_lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop2_id" NEXT="coop2_firstname"/>
+        <FIELD NAME="coop2_firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop2_lastname" NEXT="supervisor_lastname"/>
+        <FIELD NAME="supervisor_lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop2_firstname" NEXT="supervisor_firstname"/>
+        <FIELD NAME="supervisor_firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="supervisor_lastname" NEXT="comments"/>
+        <FIELD NAME="comments" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="supervisor_firstname" NEXT="address"/>
+        <FIELD NAME="address" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="comments" NEXT="phone2"/>
+        <FIELD NAME="phone2" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="address" NEXT="outside_province"/>
+        <FIELD NAME="outside_province" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="phone2" NEXT="mileage_claimed"/>
+        <FIELD NAME="mileage_claimed" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="outside_province" NEXT="onecard"/>
+        <FIELD NAME="onecard" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="mileage_claimed"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="placement_supervisor" COMMENT="A list of supervisors for student teachers" PREVIOUS="placement_initial" NEXT="placement_users">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="profid"/>
+        <FIELD NAME="profid" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="id" NEXT="lastname"/>
+        <FIELD NAME="lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="profid" NEXT="firstname"/>
+        <FIELD NAME="firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="lastname" NEXT="address"/>
+        <FIELD NAME="address" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="firstname" NEXT="city"/>
+        <FIELD NAME="city" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="address" NEXT="province"/>
+        <FIELD NAME="province" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="city" NEXT="postalcode"/>
+        <FIELD NAME="postalcode" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="province" NEXT="phone"/>
+        <FIELD NAME="phone" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="postalcode" NEXT="fax"/>
+        <FIELD NAME="fax" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="phone" NEXT="category"/>
+        <FIELD NAME="category" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="fax" NEXT="email"/>
+        <FIELD NAME="email" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="category" NEXT="sin"/>
+        <FIELD NAME="sin" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="email" NEXT="studentteacherid"/>
+        <FIELD NAME="studentteacherid" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="sin" NEXT="stage"/>
+        <FIELD NAME="stage" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="studentteacherid" NEXT="fee"/>
+        <FIELD NAME="fee" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="stage" NEXT="travel"/>
+        <FIELD NAME="travel" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="fee" NEXT="semester"/>
+        <FIELD NAME="semester" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="travel" NEXT="comments"/>
+        <FIELD NAME="comments" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="semester" NEXT="orientation_dinner"/>
+        <FIELD NAME="orientation_dinner" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="comments" NEXT="claimfee"/>
+        <FIELD NAME="claimfee" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="orientation_dinner" NEXT="claimtravel"/>
+        <FIELD NAME="claimtravel" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="claimfee" NEXT="claimnothing"/>
+        <FIELD NAME="claimnothing" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="claimtravel" NEXT="paid"/>
+        <FIELD NAME="paid" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="claimnothing" NEXT="job"/>
+        <FIELD NAME="job" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="paid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="placement_users" COMMENT="Records information on principals that use the student teacher placement system" PREVIOUS="placement_supervisor" NEXT="placement_students">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="lastname"/>
+        <FIELD NAME="lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="id" NEXT="firstname"/>
+        <FIELD NAME="firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="lastname" NEXT="schoolboard"/>
+        <FIELD NAME="schoolboard" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="firstname" NEXT="school"/>
+        <FIELD NAME="school" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolboard" NEXT="schoolid"/>
+        <FIELD NAME="schoolid" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="school" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="schoolid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="placement_students" COMMENT="Records information on student teacher users" PREVIOUS="placement_users" NEXT="placement_stage1">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="id" NEXT="firstname"/>
+        <FIELD NAME="firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="userid" NEXT="lastname"/>
+        <FIELD NAME="lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="firstname" NEXT="stage"/>
+        <FIELD NAME="stage" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="lastname" NEXT="registered"/>
+        <FIELD NAME="registered" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="stage"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="placement_stage1" COMMENT="A list of student teachers in the stage1 placement" PREVIOUS="placement_students" NEXT="placement_stage2">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="student_teacher_id"/>
+        <FIELD NAME="student_teacher_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="id" NEXT="lastname"/>
+        <FIELD NAME="lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="student_teacher_id" NEXT="firstname"/>
+        <FIELD NAME="firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="lastname" NEXT="phone"/>
+        <FIELD NAME="phone" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="firstname" NEXT="email"/>
+        <FIELD NAME="email" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="phone" NEXT="type"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="email" NEXT="program"/>
+        <FIELD NAME="program" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="type" NEXT="stage"/>
+        <FIELD NAME="stage" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="program" NEXT="schoolboard"/>
+        <FIELD NAME="schoolboard" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="stage" NEXT="supervisor"/>
+        <FIELD NAME="supervisor" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolboard" NEXT="semester"/>
+        <FIELD NAME="semester" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="supervisor" NEXT="school"/>
+        <FIELD NAME="school" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="semester" NEXT="coop_teacher_id"/>
+        <FIELD NAME="coop_teacher_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="school" NEXT="supervisor_id"/>
+        <FIELD NAME="supervisor_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="coop_teacher_id" NEXT="minor"/>
+        <FIELD NAME="minor" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="supervisor_id" NEXT="major"/>
+        <FIELD NAME="major" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="minor" NEXT="schoolid"/>
+        <FIELD NAME="schoolid" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="major" NEXT="coop_lastname"/>
+        <FIELD NAME="coop_lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolid" NEXT="coop_firstname"/>
+        <FIELD NAME="coop_firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop_lastname" NEXT="schoolyear"/>
+        <FIELD NAME="schoolyear" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop_firstname" NEXT="vehicle"/>
+        <FIELD NAME="vehicle" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolyear" NEXT="coop2_id"/>
+        <FIELD NAME="coop2_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="vehicle" NEXT="coop2_lastname"/>
+        <FIELD NAME="coop2_lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop2_id" NEXT="coop2_firstname"/>
+        <FIELD NAME="coop2_firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop2_lastname" NEXT="supervisor_lastname"/>
+        <FIELD NAME="supervisor_lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop2_firstname" NEXT="supervisor_firstname"/>
+        <FIELD NAME="supervisor_firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="supervisor_lastname" NEXT="comments"/>
+        <FIELD NAME="comments" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="supervisor_firstname" NEXT="address"/>
+        <FIELD NAME="address" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="comments" NEXT="phone2"/>
+        <FIELD NAME="phone2" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="address" NEXT="outside_province"/>
+        <FIELD NAME="outside_province" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="phone2" NEXT="onecard"/>
+        <FIELD NAME="onecard" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="outside_province" NEXT="schooltype"/>
+        <FIELD NAME="schooltype" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="onecard" NEXT="rural_placement"/>
+        <FIELD NAME="rural_placement" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schooltype" NEXT="rural_location"/>
+        <FIELD NAME="rural_location" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="rural_placement" NEXT="rural_scholarship"/>
+        <FIELD NAME="rural_scholarship" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="rural_location" NEXT="rural_accomidation"/>
+        <FIELD NAME="rural_accomidation" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="rural_scholarship" NEXT="specific_preference"/>
+        <FIELD NAME="specific_preference" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="rural_accomidation" NEXT="preferences"/>
+        <FIELD NAME="preferences" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="specific_preference" NEXT="initial_stage_teacher"/>
+        <FIELD NAME="initial_stage_teacher" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="preferences" NEXT="initial_stage_level"/>
+        <FIELD NAME="initial_stage_level" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="initial_stage_teacher" NEXT="initial_stage_school"/>
+        <FIELD NAME="initial_stage_school" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="initial_stage_level"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="placement_stage2" COMMENT="A list of student teachers in the stage2 placement" PREVIOUS="placement_stage1">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="student_teacher_id"/>
+        <FIELD NAME="student_teacher_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="id" NEXT="lastname"/>
+        <FIELD NAME="lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="student_teacher_id" NEXT="firstname"/>
+        <FIELD NAME="firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="lastname" NEXT="phone"/>
+        <FIELD NAME="phone" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="firstname" NEXT="email"/>
+        <FIELD NAME="email" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="phone" NEXT="type"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="email" NEXT="program"/>
+        <FIELD NAME="program" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="type" NEXT="stage"/>
+        <FIELD NAME="stage" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="program" NEXT="schoolboard"/>
+        <FIELD NAME="schoolboard" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="stage" NEXT="supervisor"/>
+        <FIELD NAME="supervisor" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolboard" NEXT="semester"/>
+        <FIELD NAME="semester" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="supervisor" NEXT="school"/>
+        <FIELD NAME="school" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="semester" NEXT="coop_teacher_id"/>
+        <FIELD NAME="coop_teacher_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="school" NEXT="supervisor_id"/>
+        <FIELD NAME="supervisor_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="coop_teacher_id" NEXT="minor"/>
+        <FIELD NAME="minor" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="supervisor_id" NEXT="major"/>
+        <FIELD NAME="major" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="minor" NEXT="schoolid"/>
+        <FIELD NAME="schoolid" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="major" NEXT="coop_lastname"/>
+        <FIELD NAME="coop_lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolid" NEXT="coop_firstname"/>
+        <FIELD NAME="coop_firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop_lastname" NEXT="schoolyear"/>
+        <FIELD NAME="schoolyear" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop_firstname" NEXT="vehicle"/>
+        <FIELD NAME="vehicle" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schoolyear" NEXT="coop2_id"/>
+        <FIELD NAME="coop2_id" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="vehicle" NEXT="coop2_lastname"/>
+        <FIELD NAME="coop2_lastname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop2_id" NEXT="coop2_firstname"/>
+        <FIELD NAME="coop2_firstname" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop2_lastname" NEXT="comments"/>
+        <FIELD NAME="comments" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="coop2_firstname" NEXT="address"/>
+        <FIELD NAME="address" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="comments" NEXT="phone2"/>
+        <FIELD NAME="phone2" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="address" NEXT="outside_province"/>
+        <FIELD NAME="outside_province" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="phone2" NEXT="mileage_claimed"/>
+        <FIELD NAME="mileage_claimed" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="outside_province" NEXT="onecard"/>
+        <FIELD NAME="onecard" TYPE="int" LENGTH="20" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="mileage_claimed" NEXT="schooltype"/>
+        <FIELD NAME="schooltype" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="onecard" NEXT="rural_placement"/>
+        <FIELD NAME="rural_placement" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="schooltype" NEXT="rural_loaction"/>
+        <FIELD NAME="rural_loaction" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="rural_placement" NEXT="rural_scholarship"/>
+        <FIELD NAME="rural_scholarship" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="rural_loaction" NEXT="rural_accomidation"/>
+        <FIELD NAME="rural_accomidation" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="rural_scholarship" NEXT="specific_preference"/>
+        <FIELD NAME="specific_preference" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="rural_accomidation" NEXT="preferences"/>
+        <FIELD NAME="preferences" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="specific_preference" NEXT="initial_stage_teacher"/>
+        <FIELD NAME="initial_stage_teacher" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="preferences" NEXT="initial_stage_level"/>
+        <FIELD NAME="initial_stage_level" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="initial_stage_teacher" NEXT="initial_stage_school"/>
+        <FIELD NAME="initial_stage_school" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="initial_stage_level" NEXT="stage1_teacher"/>
+        <FIELD NAME="stage1_teacher" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="initial_stage_school" NEXT="stage1_level"/>
+        <FIELD NAME="stage1_level" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="stage1_teacher" NEXT="stage1_school"/>
+        <FIELD NAME="stage1_school" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false" PREVIOUS="stage1_level"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
