@@ -28,6 +28,11 @@
 **************************************************************************
 **************************************************************************/
 
+
+//This script provides all the javascript functions for viewprincipal.php
+
+
+//navigates to edit teacher page
 function edit()
 {
 var id = 0;
@@ -44,36 +49,50 @@ var none = true;
     });
     
     if(!none)
-        window.location = root + '/local/placement/user/viewadmin.php?view=edit&id=' + id;
+        window.location = root + '/local/placement/user/viewprincipal.php?view=edit&id=' + id;
     else
         alert(document.getElementById("alert").className);
 }
 
+//navigates to edit school page
 function edit_sch()
 {
-    window.location = document.getElementById('cfg').className + '/local/placement/user/viewadmin.php?view=editschool';
+    window.location = document.getElementById('cfg').className + '/local/placement/user/viewprincipal.php?view=editschool';
 }
 
+//navigates to the add teacher page
 function add_teacher()
 {
-    window.location = $(".radio1").attr('alt') + '/local/placement/user/viewadmin.php?view=add';
+    window.location = document.getElementById('cfg').className + '/local/placement/user/viewprincipal.php?view=add';
 }
 
+//Checks to see if radio buttons have been filled (jquery validation plugin doesn't do this) [add teacher form]
 function check_grade2()
 {
     $("#newteacher").submit(function(e){
             e.preventDefault();
         });
+        
+    //Grades taught checkboxes
     var checked = false;
     $(".checkbox1").each(function(){
         if(this.checked)
             checked = true;
     });
+    
+    //Core subject checkboxes
+    var checked2 = false;
+    $(".checkbox2").each(function(){
+        if(this.checked)
+            checked2 = true;
+    });
 
-    if(!checked)
+    //If checkboxes aren't filled
+    if((!checked) || (!checked2))
         alert(document.getElementById('choosegrade').className);
     else
     {
+        //stage radio buttons
         var check = false;
         $("input[name=stage]").each(function(){
             if(this.checked)
@@ -82,35 +101,48 @@ function check_grade2()
         
         if(!check)
             alert(document.getElementById('choosestage').className);
+        //If everything checks out, call new_teacher()
         else
             new_teacher();
     }
 }
 
+//Saves teacher information
 function new_teacher()
 {
+    //run validation plugin
     $('form.required-form').simpleValidate({
 		errorElement: 'em',
                 ajaxRequest: true,
 		completeCallback: function() {
                 
+        
         var firstname = $("input[name = firstname]").attr('value');
         var lastname = $("input[name = lastname]").attr('value');
         var experience = $("input[name = experience]").attr('value');
         var levelexp = $("input[name = levelexp]").attr('value');
         var grd = '';
 
+        //make a list of the selected grades
         $(".checkbox1").each(function(){
             if(this.checked)
                 grd = grd + this.value + ',';
         });
-
+        
+        //make a list of the selected core subjects
+        var t = '';
+        $(".checkbox2").each(function(){
+            if(this.checked)
+                t = t + this.value + ',';
+        });
+        
+        var taught = t.slice(0, -1);
         var grade = grd.slice(0, -1);
         var email = $("input[name = email]").attr('value');
-        var taught = $("textarea[name = taught]").attr('value');
         var pref = $("textarea[name = pref]").attr('value');
         var stg = 0;
 
+        //Check which stage is selected
         $("input[name = stage]").each(function(){
             if(this.checked)
                 stg = this.value;
@@ -131,6 +163,7 @@ function new_teacher()
 
         var sess = 0;
 
+        //checks which session is selected
         $("input[name = session]").each(function(){
             if(this.checked)
                 sess = this.value;
@@ -147,43 +180,58 @@ function new_teacher()
                 break;
         }
 
+        //build a string of all the variables
         var snd = firstname + '|' + lastname + '|' + experience + '|' + levelexp + '|' + grade + '|' + email + '|' + taught + '|' + pref + '|' + stage + '|' + session;
         var send = escape(snd);
-
-        $("#null").load('request.php?addt=' + send, function(){
+        
+        //Saves teacher's information - creates user
+        $("#null").load('requestprincipal.php?addt=' + send, function(){
             alert(document.getElementById('worked').className);
-            window.location = document.getElementById('cfg').className + '/local/placement/user/viewadmin.php?view=admin';
+            window.location = document.getElementById('cfg').className + '/local/placement/user/viewprincipal.php?view=admin';
         });
         }
     });
 }
 
+//Return to admin page - usually called when a cancel button is clicked
 function return_admin()
 {
-    window.location = document.getElementById('cfg').className + '/local/placement/user/viewadmin.php?view=admin';
+    window.location = document.getElementById('cfg').className + '/local/placement/user/viewprincipal.php?view=admin';
 }
 
+//Checks to see if radio buttons have been filled (jquery validation plugin doesn't do this) [edit teacher form]
 function check_grade(id)
 {
     $("#newteacher").submit(function(e){
             e.preventDefault();
         });
-   var checked = false;
+        
+    //Grades taught checkboxes
+    var checked = false;
     $(".checkbox1").each(function(){
         if(this.checked)
             checked = true;
+    });
+    
+    //Core subject checkboxes
+    var checked2 = false;
+    $(".checkbox2").each(function(){
+        if(this.checked)
+            checked2 = true;
     });
     
     if(!checked)
         alert(document.getElementById('choosegrade').className);
     else
     {
+        //if validation is successful, call edit_teacher()
         edit_teacher(id);
     }
 }
 
 function edit_teacher(id)
 {
+    //run validation plugin
     $('form.required-form').simpleValidate({
 		errorElement: 'em',
                 ajaxRequest: true,
@@ -195,17 +243,26 @@ function edit_teacher(id)
             var levelexp = $("input[name = levelexp]").attr('value');
             var grd = '';
 
+            //builds list of grades taught
             $(".checkbox1").each(function(){
                 if(this.checked)
                     grd = grd + this.value + ',';
             });
+            
+            //builds a list of core subjects taught by the teacher
+            var t = '';
+            $(".checkbox2").each(function(){
+                if(this.checked)
+                    t = t + this.value + ',';
+            });
 
             var grade = grd.slice(0, -1);
             var email = $("input[name = email]").attr('value');
-            var taught = $("textarea[name = taught]").attr('value');
+            var taught = t.slice(0, -1);
             var pref = $("textarea[name = pref]").attr('value');
             var stg = 0;
 
+            //checks which stage is selected
             $("input[name = stage]").each(function(){
                 if(this.checked)
                     stg = this.value;
@@ -226,6 +283,7 @@ function edit_teacher(id)
 
             var sess = 0;
 
+            //checks which session is selected
             $("input[name = session]").each(function(){
                 if(this.checked)
                     sess = this.value;
@@ -242,16 +300,35 @@ function edit_teacher(id)
                     break;
             }
 
+            //builds a string of teacher info to send in request
             var snd = firstname + '|' + lastname + '|' + experience + '|' + levelexp + '|' + grade + '|' + email + '|' + taught + '|' + pref + '|' + stage + '|' + session;
             var send = escape(snd);  
             
-            
-            $("#null").load('request.php?editt=' + send + '&tid=' + id, function(){
+            //Saves teacher info
+            $("#null").load('requestprincipal.php?editt=' + send + '&tid=' + id, function(){
                 alert(document.getElementById('edited').className);
-                window.location = document.getElementById('cfg').className + '/local/placement/user/viewadmin.php?view=admin';
+                window.location = document.getElementById('cfg').className + '/local/placement/user/viewprincipal.php?view=admin';
             });
         }
     });
+}
+
+function remove_teacher()
+{
+    if(confirm(document.getElementById('confirm').className))
+    {
+        var id = 0;
+
+        $(".radio1").each(function(){
+            if(this.checked)
+               id = this.value;
+        });
+
+        $("#load").load('requestprincipal.php?remove=' + id, function (){
+            alert(document.getElementById('removed').className);
+            document.location.reload();
+        });
+    }
 }
 
 function new_user()
@@ -331,9 +408,9 @@ function create_user()
     var snd = firstname + '|' + lastname + '|' + email + '|' + board + '|' + school + '|' + sex + '|' + lang;
     var send = encodeURIComponent(snd);
     
-    $("#null").load('request.php?prin=' + send + '&newboard=' + newboard + '&newschool=' + newschool, function(){
+    $("#null").load('requestprincipal.php?prin=' + send + '&newboard=' + newboard + '&newschool=' + newschool, function(){
         alert(document.getElementById('saved').className);
-        window.location = document.getElementById('cfg').className + '/local/placement/user/viewadmin.php?view=editschool';
+        window.location = document.getElementById('cfg').className + '/local/placement/user/viewprincipal.php?view=editschool';
     });
 }
 
@@ -360,17 +437,19 @@ function save_school()
         var program = $("#program").attr('value');
         var site = $("#website").attr('value');
         var zone = $("#zone").attr('value');
+        var lev = $("#lev").attr('value');
+        var type = $("#type").attr('value');
         
         if((name == '') || (address == '') || (city == '') || (sphone == '') || (province == '') || (postal == '') || (pfirst == '') || (plast == '') || (pemail == '') || (pphone == '') || (cfirst == '') || (clast == '') || (cphone == '') || (cemail == '') || (clang == '') || (csex == '') || (board == '') || (program == '') || (site == '') || (zone == ''))
             alert(document.getElementById('req').className);
         else
         {
-            var snd = name + '|' + address + '|' + city + '|' + sphone + '|' + province + '|' + postal + '|' + pfirst + '|' + plast + '|' + pemail + '|' + pphone + '|' + cfirst + '|' + clast + '|' + cphone + '|' + fax + '|' + cemail + '|' + clang + '|' + csex + '|' + board + '|' + program + '|' + site + '|' + zone;
+            var snd = name + '|' + address + '|' + city + '|' + sphone + '|' + province + '|' + postal + '|' + pfirst + '|' + plast + '|' + pemail + '|' + pphone + '|' + cfirst + '|' + clast + '|' + cphone + '|' + fax + '|' + cemail + '|' + clang + '|' + csex + '|' + board + '|' + program + '|' + site + '|' + zone + '|' + type + '|' + lev;
             var send = encodeURIComponent(snd);
             
-            $("#null").load('request.php?school=' + send, function(){
+            $("#null").load('requestprincipal.php?school=' + send, function(){
                 alert(document.getElementById('saved').className);
-                window.location = document.getElementById('cfg').className + '/local/placement/user/viewadmin.php?view=admin';
+                window.location = document.getElementById('cfg').className + '/local/placement/user/viewprincipal.php?view=admin';
             });
         }
 }
@@ -417,7 +496,7 @@ $(document).ready(function(){
         $("#initialize").show();
         var school = $("#sch").attr('value');
         var sch = encodeURIComponent(school);
-        $("#sb").load('request.php?sb=' + sch);
+        $("#sb").load('requestprincipal.php?sb=' + sch);
         
         $("#initialize").dialog({ dialogClass: 'no-close' }, { resizable: false });
         $("#initialize").dialog('option','width', '430');
@@ -460,12 +539,39 @@ $(document).ready(function(){
         if($("#program").attr('name') !== '')
             document.getElementById("program").value = $("#program").attr('name');
     }
+    
+    if($("#edit").length > 0)
+    {
+        var sub = document.getElementById('edit').className;
+        
+        if(sub.indexOf("None") !== -1)
+            document.getElementById('none').checked = true;
+        if(sub.indexOf("Language Arts") !== -1)
+            document.getElementById('la').checked = true;
+        if(sub.indexOf("Math") !== -1)
+            document.getElementById('math').checked = true;
+        if(sub.indexOf("Science") !== -1)
+            document.getElementById('science').checked = true;
+        if(sub.indexOf("Social Studies") !== -1)
+            document.getElementById('social').checked = true;
+        
+        var yr = document.getElementById('year').className;
+        
+        var year = yr.split(',');
+        
+        var gr = '';
+        for(i = 0; i < year.length; i++)
+        {
+            gr = year[i];
+            document.getElementById(gr).checked = true;
+        }
+    }
 });
 
 function school_select(school)
 {
     var sch = encodeURIComponent(school);
-    $("#sb").load('request.php?sb=' + sch);
+    $("#sb").load('requestprincipal.php?sb=' + sch);
 }
 
 $("#hideschool").click(function(){
@@ -707,6 +813,20 @@ function(){
     document.getElementById('grade').style.backgroundColor = 'darkgray';
     if((document.getElementById('list').style.display == '') || (document.getElementById('list').style.display == 'block'))
         $("#list").slideUp('fast');
+});
+
+$("#core").hover(function(){
+    document.getElementById('core').style.backgroundColor = 'dimgray';
+    
+    if(document.getElementById('cores').style.display == 'none')
+    {
+        $("#cores").slideDown();
+    }
+},
+function(){
+    document.getElementById('core').style.backgroundColor = 'darkgray';
+    if((document.getElementById('cores').style.display == '') || (document.getElementById('cores').style.display == 'block'))
+        $("#cores").slideUp('fast');
 });
 
 var BrowserDetect = {

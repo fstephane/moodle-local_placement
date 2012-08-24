@@ -29,6 +29,16 @@
 **************************************************************************
 **************************************************************************/
 
+//This page provides functions for viewuser.php
+
+
+/**
+* Form for adding a teacher
+*
+* @global moodle_database $DB
+* @global stdClass $USER
+* @global stdClass $CFG
+**/
 function dialog()
 {
     global $DB, $CFG, $USER;
@@ -49,12 +59,22 @@ function dialog()
     <?php
 }
 
+
+/**
+* EDU registration form
+*
+* @global moodle_database $DB
+* @global stdClass $USER
+* @global stdClass $CFG
+**/
 function initial()
 {
     global $DB, $CFG, $USER;
     $stud = $DB->get_record('user', array('id' => $USER->id));
     $schools = $DB->get_records('placement_school', array(), 'school');
+    $stude = $DB->get_record('placement_initial', array('email' => $stud->email));
     ?>
+    <!--FORM PROVIDES VALIDATION - REQUIRED FIELDS MUST BE FILLED-->
     <form class="required-form" name="newstudent" id="newstudent">
     <div class="center" style="width:900px;">
     </div>
@@ -65,40 +85,48 @@ function initial()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('personal', 'local_placement'); ?></span>
             <table id="alert" class="<?php echo get_string('required', 'local_placement'); ?>">
                 <tr id="saved" class="<?php echo get_string('usersaved', 'local_placement'); ?>">
+                <!--FIRSTNAME-->
                     <td id="cfg" class="<?php echo $CFG->wwwroot; ?>">
                         <span style="color:red;">*</span><?php echo get_string('firstname', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="firstname" class="required"/>
+                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="firstname" class="required" value="<?php echo $stud->firstname; ?>"/>
                     </td>
+                <!--LASTNAME-->
                     <td id="onealert" class="0">
                         <span style="color:red;">*</span><?php echo get_string('lastname', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="lastname" class="required"/>
+                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="lastname" class="required" value="<?php echo $stud->lastname; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--PHONE NUMBER-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('phone', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="phone" class="required"/>
                     </td>
+                <!--EMAIL-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('email', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="email" class="required email"/>
+                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="email" class="required email" value="<?php echo $stud->email; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ADDRESS-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('address', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="address" class="required"/>
                     </td>
+                <!--CITY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('city', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="city" class="required"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ONECARD-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('onecard', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="onecard" class="required"/>
                     </td>
+                <!--VEHICLE-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('vehicle', 'local_placement'); ?>:
                         <select name="vehicle" style="margin-left:8px;">
@@ -113,11 +141,13 @@ function initial()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('programinfo', 'local_placement'); ?></span>
             <table>
                 <tr>
+                <!--FRANCOPHONE/IMMERSION-->
                     <td>
                         <div style="margin-top:-20px;"><span style="color:red;">*</span><?php echo get_string('langpro', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio2" name="lang" value="francophone"/><span style="font-weight:bold;"><?php echo ' ' . get_string('french', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio2" name="lang" value="immersion"/><span style="font-weight:bold;"><?php echo ' ' . get_string('immersion', 'local_placement'); ?></span></div>
                     </td>
+                <!--ELEMENTARY/SECONDARY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('schoollev', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio3" name="level" value="elementary" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('elementary', 'local_placement'); ?></span><br/>
@@ -131,10 +161,12 @@ function initial()
                     <td/>
                 </tr>
                 <tr>
+                <!--MAJOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('major', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:10px;" name="maj" class="required"/>
                     </td>
+                <!--MINOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('minor', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:100px;" name="min" class="required"/>
@@ -146,51 +178,27 @@ function initial()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('pref', 'local_placement'); ?></span>
             <table>
                 <tr>
-                    <td colspan="2">
-                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:
-                        <div style="float:right;margin-right:360px;"><input type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
+                <!--CATHOLIC/PUBLIC-->
+                    <td>
+                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:<br/><br/>
+                        <div style=""><input type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio4" name="type" value="public"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('public', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio4" name="type" value="doesn't matter"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('nomatter', 'local_placement'); ?></span></div>
                     </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <br/><hr/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <span style="color:red;">*</span><?php echo get_string('rural', 'local_placement'); ?>:
-                        <input id="yes" type="radio" class="radio5" name="rural" value="y" style="margin-left:20px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
-                        <input type="radio" class="radio5" name="rural" value="n" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('no', 'local_placement'); ?></span>
-                    </td>
-                </tr>
-                <tr>
+                <!--CORE SUBJECT PREFERENCE-->
                     <td>
-                        <br/><span style="margin-left:20px;font-weight:bold;">-  <?php echo get_string('ifyes', 'local_placement'); ?>:</span>
+                        <?php echo get_string('subject', 'local_placement'); ?><br/><br/>
+                        <select name="core">
+                            <option value="none"><?php echo get_string('nomatter', 'local_placement'); ?></option>
+                            <option value="language arts"><?php echo get_string('la', 'local_placement'); ?></option>
+                            <option value="math"><?php echo get_string('math', 'local_placement'); ?></option>
+                            <option value="science"><?php echo get_string('science', 'local_placement'); ?></option>
+                            <option value="social studies"><?php echo get_string('social', 'local_placement'); ?></option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <br/><p><span class="show" style="color:red;display:none;">*</span><?php echo get_string('location', 'local_placement'); ?>:<span>    </span><input name="location" type="text"/></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"><br/>
-                        <span class="show" style="color:red;display:none;">*</span><?php echo get_string('scholarship', 'local_placement'); ?>:
-                        <input type="radio" class="radio6" name="scholarship" value="y" style="margin-left:30px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
-                        <input type="radio" class="radio6" name="scholarship" value="n"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('no', 'local_placement'); ?></span><br/>
-                        <b><?php echo get_string('scholdetail', 'local_placement'); ?></b>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"><br/>
-                        <span class="show" style="color:red;display:none;">*</span><?php echo get_string('housing', 'local_placement'); ?>:
-                        <input type="radio" class="radio7" name="housing" value="y" style="margin-left:30px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
-                        <input type="radio" class="radio7" name="housing" value="n"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('no', 'local_placement'); ?></span>
-                    </td>
-                </tr>
-                <tr>
+                <!--SPECIFIC SCHOOL PREFERENCE-->
                     <td colspan="2"><br/><hr/><br/>
                         <?php echo get_string('specific', 'local_placement'); ?>:<br/><br/>
                         <select name="specific">
@@ -207,6 +215,7 @@ function initial()
                     </td>
                 </tr>
                 <tr>
+                <!--OTHER PREFERENCES-->
                     <td colspan="2"><br/><hr/><br/>
                         <?php echo get_string('otherinfo', 'local_placement'); ?><br/><br/>
                         <textarea name="pref" cols="110" rows="10" style="resize:none;"></textarea>
@@ -229,12 +238,21 @@ function initial()
     <?php
 }
 
+
+/**
+* Stage 1 registration form
+*
+* @global moodle_database $DB
+* @global stdClass $USER
+* @global stdClass $CFG
+**/
 function stage1()
 {
     global $DB, $CFG, $USER;
     $stud = $DB->get_record('user', array('id' => $USER->id));
     $schools = $DB->get_records('placement_school', array(), 'school');
     ?>
+    <!--FORM PROVIDES VALIDATION - REQUIRED FIELDS MUST BE FILLED-->
     <form class="required-form" name="newstudent" id="newstudent">
     <div class="center" style="width:900px;">
     </div>
@@ -245,40 +263,48 @@ function stage1()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('personal', 'local_placement'); ?></span>
             <table id="alert" class="<?php echo get_string('required', 'local_placement'); ?>">
                 <tr id="saved" class="<?php echo get_string('usersaved', 'local_placement'); ?>">
+                <!--FIRSTNAME-->
                     <td id="cfg" class="<?php echo $CFG->wwwroot; ?>">
                         <span style="color:red;">*</span><?php echo get_string('firstname', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="firstname" class="required"/>
+                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="firstname" class="required" value="<?php echo $stud->firstname; ?>"/>
                     </td>
+                <!--LASTNAME-->
                     <td id="onealert" class="0">
                         <span style="color:red;">*</span><?php echo get_string('lastname', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="lastname" class="required"/>
+                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="lastname" class="required" value="<?php echo $stud->lastname; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--PHONE NUMBER-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('phone', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="phone" class="required"/>
                     </td>
+                <!--EMAIL-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('email', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="email" class="required email"/>
+                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="email" class="required email" value="<?php echo $stud->email; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ADDRESS-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('address', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="address" class="required"/>
                     </td>
+                <!--CITY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('city', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="city" class="required"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ONECARD-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('onecard', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="onecard" class="required"/>
                     </td>
+                <!--VEHICLE-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('vehicle', 'local_placement'); ?>:
                         <select name="vehicle" style="margin-left:8px;">
@@ -293,11 +319,13 @@ function stage1()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('programinfo', 'local_placement'); ?></span>
             <table>
                 <tr>
+                <!--FRANCOPHONE/IMMERSION-->
                     <td>
                         <div style="margin-top:-20px;"><span style="color:red;">*</span><?php echo get_string('langpro', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio2" name="lang" value="francophone"/><span style="font-weight:bold;"><?php echo ' ' . get_string('french', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio2" name="lang" value="immersion"/><span style="font-weight:bold;"><?php echo ' ' . get_string('immersion', 'local_placement'); ?></span></div>
                     </td>
+                <!--ELEMENTARY/SECONDARY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('schoollev', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio3" name="level" value="elementary" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('elementary', 'local_placement'); ?></span><br/>
@@ -311,10 +339,12 @@ function stage1()
                     <td/>
                 </tr>
                 <tr>
+                <!--MAJOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('major', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:10px;" name="maj" class="required"/>
                     </td>
+                <!--MINOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('minor', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:100px;" name="min" class="required"/>
@@ -326,11 +356,23 @@ function stage1()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('pref', 'local_placement'); ?></span>
             <table>
                 <tr>
-                    <td colspan="2">
-                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:
-                        <div style="float:right;margin-right:360px;"><input type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
+                <!--CATHOLIC/PUBLIC-->
+                    <td>
+                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:<br/><br/>
+                        <div style=""><input type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio4" name="type" value="public"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('public', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio4" name="type" value="doesn't matter"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('nomatter', 'local_placement'); ?></span></div>
+                    </td>
+                <!--CORE SUBJECT PREFERENCE-->
+                    <td>
+                        <?php echo get_string('subject', 'local_placement'); ?><br/><br/>
+                        <select name="core">
+                            <option value="none"><?php echo get_string('nomatter', 'local_placement'); ?></option>
+                            <option value="language arts"><?php echo get_string('la', 'local_placement'); ?></option>
+                            <option value="math"><?php echo get_string('math', 'local_placement'); ?></option>
+                            <option value="science"><?php echo get_string('science', 'local_placement'); ?></option>
+                            <option value="social studies"><?php echo get_string('social', 'local_placement'); ?></option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
@@ -339,6 +381,7 @@ function stage1()
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL PLACEMENT  YES/NO-->
                     <td colspan="2">
                         <span style="color:red;">*</span><?php echo get_string('rural', 'local_placement'); ?>:
                         <input id="yes" type="radio" class="radio5" name="rural" value="y" style="margin-left:20px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
@@ -351,11 +394,13 @@ function stage1()
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL LOCATION-->
                     <td>
                         <br/><p><span class="show" style="color:red;display:none;">*</span><?php echo get_string('location', 'local_placement'); ?>:<span>    </span><input name="location" type="text"/></p>
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL SCHOLARSHIP YES/NO-->
                     <td colspan="2"><br/>
                         <span class="show" style="color:red;display:none;">*</span><?php echo get_string('scholarship', 'local_placement'); ?>:
                         <input type="radio" class="radio6" name="scholarship" value="y" style="margin-left:30px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
@@ -364,6 +409,7 @@ function stage1()
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL HOUSING ACCOMMODATION YES/NO-->
                     <td colspan="2"><br/>
                         <span class="show" style="color:red;display:none;">*</span><?php echo get_string('housing', 'local_placement'); ?>:
                         <input type="radio" class="radio7" name="housing" value="y" style="margin-left:30px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
@@ -371,6 +417,7 @@ function stage1()
                     </td>
                 </tr>
                 <tr>
+                <!--LIST OF SCHOOLS FOR SPECIFIC SCHOOL PREFERENCE-->
                     <td colspan="2"><br/><hr/><br/>
                         <?php echo get_string('specific', 'local_placement'); ?>:<br/><br/>
                         <select name="specific">
@@ -387,6 +434,7 @@ function stage1()
                     </td>
                 </tr>
                 <tr>
+                <!--OTHER PREFERENCES-->
                     <td colspan="2"><br/><hr/><br/>
                         <?php echo get_string('otherinfo', 'local_placement'); ?><br/><br/>
                         <textarea name="pref" cols="110" rows="10" style="resize:none;"></textarea>
@@ -398,14 +446,17 @@ function stage1()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('first', 'local_placement'); ?></span>
             <table>
                 <tr>
+                <!--EDU STAGE TEACHER NAME-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('teachername', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:120px;" name="teacher" class="required"/>
                     </td>
+                <!--EDU STAGE SCHOOL NAME-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('school', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:120px;" name="school" class="required"/>
                     </td>
+                <!--EDU STAGE LEVEL-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('level', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:120px;" name="level2" class="required"/>
@@ -428,12 +479,21 @@ function stage1()
     <?php
 }
 
+
+/**
+* Form for adding a teacher
+*
+* @global moodle_database $DB
+* @global stdClass $USER
+* @global stdClass $CFG
+**/
 function stage2()
 {
     global $DB, $CFG, $USER;
     $stud = $DB->get_record('user', array('id' => $USER->id));
     $schools = $DB->get_records('placement_school', array(), 'school');
     ?>
+    <!--FORM PROVIDES VALIDATION - REQUIRED FIELDS MUST BE FILLED-->
     <form class="required-form" name="newstudent" id="newstudent">
     <div class="center" style="width:900px;">
     </div>
@@ -444,40 +504,48 @@ function stage2()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('personal', 'local_placement'); ?></span>
             <table id="alert" class="<?php echo get_string('required', 'local_placement'); ?>">
                 <tr id="saved" class="<?php echo get_string('usersaved', 'local_placement'); ?>">
+                <!--FIRSTNAME-->
                     <td id="cfg" class="<?php echo $CFG->wwwroot; ?>">
                         <span style="color:red;">*</span><?php echo get_string('firstname', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="firstname" class="required"/>
+                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="firstname" class="required" value="<?php echo $stud->firstname; ?>"/>
                     </td>
+                <!--LASTNAME-->
                     <td id="onealert" class="0">
                         <span style="color:red;">*</span><?php echo get_string('lastname', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="lastname" class="required"/>
+                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="lastname" class="required" value="<?php echo $stud->lastname; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--PHONE NUMBER-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('phone', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="phone" class="required"/>
                     </td>
+                <!--EMAIL-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('email', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="email" class="required email"/>
+                        <input type="text" style="float:right;width:166px;margin-right:50px;" name="email" class="required email" value="<?php echo $stud->email; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ADDRESS-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('address', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="address" class="required"/>
                     </td>
+                <!--CITY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('city', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="city" class="required"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ONECARD-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('onecard', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="onecard" class="required"/>
                     </td>
+                <!--VEHICLE-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('vehicle', 'local_placement'); ?>:
                         <select name="vehicle" style="margin-left:8px;">
@@ -492,11 +560,13 @@ function stage2()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('programinfo', 'local_placement'); ?></span>
             <table>
                 <tr>
+                <!--FRANCOPHONE/IMMERSION-->
                     <td>
                         <div style="margin-top:-20px;"><span style="color:red;">*</span><?php echo get_string('langpro', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio2" name="lang" value="francophone"/><span style="font-weight:bold;"><?php echo ' ' . get_string('french', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio2" name="lang" value="immersion"/><span style="font-weight:bold;"><?php echo ' ' . get_string('immersion', 'local_placement'); ?></span></div>
                     </td>
+                <!--ELEMENTARY/SECONDARY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('schoollev', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio3" name="level" value="elementary" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('elementary', 'local_placement'); ?></span><br/>
@@ -510,10 +580,12 @@ function stage2()
                     <td/>
                 </tr>
                 <tr>
+                <!--MAJOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('major', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:10px;" name="maj" class="required"/>
                     </td>
+                <!--MINOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('minor', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:100px;" name="min" class="required"/>
@@ -525,11 +597,23 @@ function stage2()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('pref', 'local_placement'); ?></span>
             <table>
                 <tr>
-                    <td colspan="2">
-                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:
-                        <div style="float:right;margin-right:360px;"><input type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
+                <!--CATHOLIC/PUBLIC-->
+                    <td>
+                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:<br/><br/>
+                        <div style=""><input type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio4" name="type" value="public"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('public', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio4" name="type" value="doesn't matter"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('nomatter', 'local_placement'); ?></span></div>
+                    </td>
+                <!--CORE SUBJECT PREFERENCE-->
+                    <td>
+                        <?php echo get_string('subject', 'local_placement'); ?><br/><br/>
+                        <select name="core">
+                            <option value="none"><?php echo get_string('nomatter', 'local_placement'); ?></option>
+                            <option value="language arts"><?php echo get_string('la', 'local_placement'); ?></option>
+                            <option value="math"><?php echo get_string('math', 'local_placement'); ?></option>
+                            <option value="science"><?php echo get_string('science', 'local_placement'); ?></option>
+                            <option value="social studies"><?php echo get_string('social', 'local_placement'); ?></option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
@@ -538,6 +622,7 @@ function stage2()
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL PLACEMENT YES/NO-->
                     <td colspan="2">
                         <span style="color:red;">*</span><?php echo get_string('rural', 'local_placement'); ?>:
                         <input id="yes" type="radio" class="radio5" name="rural" value="y" style="margin-left:20px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
@@ -550,11 +635,13 @@ function stage2()
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL LOCATION-->
                     <td>
                         <br/><p><span class="show" style="color:red;display:none;">*</span><?php echo get_string('location', 'local_placement'); ?>:<span>    </span><input name="location" type="text"/></p>
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL SCHOLARHSIP YES/NO-->
                     <td colspan="2"><br/>
                         <span class="show" style="color:red;display:none;">*</span><?php echo get_string('scholarship', 'local_placement'); ?>:
                         <input type="radio" class="radio6" name="scholarship" value="y" style="margin-left:30px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
@@ -563,6 +650,7 @@ function stage2()
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL HOUSING ACCOMIDATION YES/NO-->
                     <td colspan="2"><br/>
                         <span class="show" style="color:red;display:none;">*</span><?php echo get_string('housing', 'local_placement'); ?>:
                         <input type="radio" class="radio7" name="housing" value="y" style="margin-left:30px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
@@ -570,6 +658,7 @@ function stage2()
                     </td>
                 </tr>
                 <tr>
+                <!--SPECIFIC SCHOOL PREFERENCE-->
                     <td colspan="2"><br/><hr/><br/>
                         <?php echo get_string('specific', 'local_placement'); ?>:<br/><br/>
                         <select name="specific">
@@ -586,6 +675,7 @@ function stage2()
                     </td>
                 </tr>
                 <tr>
+                <!--OTHER PREFERENCES-->
                     <td colspan="2"><br/><hr/><br/>
                         <?php echo get_string('otherinfo', 'local_placement'); ?><br/><br/>
                         <textarea name="pref" cols="110" rows="10" style="resize:none;"></textarea>
@@ -597,14 +687,17 @@ function stage2()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('first', 'local_placement'); ?></span>
             <table>
                 <tr>
+                <!--EDU STAGE TEACHER NAME-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('teachername', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:120px;" name="teacher" class="required"/>
                     </td>
+                <!--EDU STAGE SCHOOL NAME-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('school', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:120px;" name="school" class="required"/>
                     </td>
+                <!--EDU STAGE LEVEL-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('level', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:120px;" name="level2" class="required"/>
@@ -616,14 +709,17 @@ function stage2()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('second', 'local_placement'); ?></span>
             <table>
                 <tr>
+                <!--STAGE 1 TEACHER NAME-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('teachername', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:120px;" name="teacher2" class="required"/>
                     </td>
+                <!--STAGE 1 SCHOOL NAME-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('school', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:120px;" name="school2" class="required"/>
                     </td>
+                <!--STAGE 1 LEVEL-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('level', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:120px;" name="level3" class="required"/>
@@ -646,12 +742,22 @@ function stage2()
     <?php
 }
 
+
+/**
+* Form for adding a teacher
+*
+* @global moodle_database $DB
+* @global stdClass $USER
+* @global stdClass $CFG
+**/
 function initial_edit()
 {
     global $DB, $CFG, $USER;
     $std = $DB->get_record('user', array('id' => $USER->id));
     $stud = $DB->get_record('placement_initial', array("email" => $std->email));
     $schools = $DB->get_records('placement_school', array(), 'school');
+    
+    //These if statements determine which radio buttons and checkboxes to fill
     
     $radio1a = '';
     $radio1b = '';
@@ -710,45 +816,46 @@ function initial_edit()
             break;
     }
     
-    $radio4a = '';
-    $radio4b = '';
-    if($stud->rural_placement == 'y')
+    switch($stud->subject_preference)
     {
-        $radio4a = 'checked="checked"';
-        $radio4b = '';
-    }
-    else
-    {
-        $radio4a = '';
-        $radio4b = 'checked="checked"';
-    }
-    
-    $radio5a = '';
-    $radio5b = '';
-    if($stud->rural_scholarship == 'y')
-    {
-        $radio5a = 'checked="checked"';
-        $radio5b = '';
-    }
-    else if($stud->rural_scholarship == 'n')
-    {
-        $radio5a = '';
-        $radio5b = 'checked="checked"';
-    }
-    
-    $radio6a = '';
-    $radio6b = '';
-    if($stud->rural_accomidation == 'y')
-    {
-        $radio6a = 'checked="checked"';
-        $radio6b = '';
-    }
-    else if($stud->rural_scholarship == 'n')
-    {
-        $radio6a = '';
-        $radio6b = 'checked="checked"';
+        case 'none':
+            $select1 = 'selected=selected';
+            $select2 = '';
+            $select3 = '';
+            $select4 = '';
+            $select5 = '';
+            break;
+        case 'language arts':
+            $select1 = '';
+            $select2 = 'selected=selected';
+            $select3 = '';
+            $select4 = '';
+            $select5 = '';
+            break;
+        case 'math':
+            $select1 = '';
+            $select2 = '';
+            $select3 = 'selected=selected';
+            $select4 = '';
+            $select5 = '';
+            break;
+        case 'science':
+            $select1 = '';
+            $select2 = '';
+            $select3 = '';
+            $select4 = 'selected=selected';
+            $select5 = '';
+            break;
+        case 'social studies':
+            $select1 = '';
+            $select2 = '';
+            $select3 = '';
+            $select4 = '';
+            $select5 = 'selected=selected';
+            break;
     }
     ?>
+    <!--FORM PROVIDES VALIDATION - REQUIRED FIELDS MUST BE FILLED-->
     <form class="required-form" name="newstudent" id="newstudent">
     <div class="center" style="width:900px;">
     </div>
@@ -760,36 +867,43 @@ function initial_edit()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('personal', 'local_placement'); ?></span>
             <table id="alert" class="<?php echo get_string('required', 'local_placement'); ?>">
                 <tr id="saved" class="<?php echo get_string('usersaved', 'local_placement'); ?>">
+                <!--FIRSTNAME-->
                     <td id="cfg" class="<?php echo $CFG->wwwroot; ?>">
                         <span style="color:red;">*</span><?php echo get_string('firstname', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="firstname" class="required" value="<?php echo $stud->firstname; ?>"/>
                     </td>
+                <!--LASTNAME-->
                     <td id="onealert" class="0">
                         <span style="color:red;">*</span><?php echo get_string('lastname', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="lastname" class="required" value="<?php echo $stud->lastname; ?>"/>
                     </td>
                 </tr>
                 <tr id="studentid" class="<?php echo $stud->student_teacher_id; ?>">
+                <!--PHONE NUMBER-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('phone', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="phone" class="required" value="<?php echo $stud->phone; ?>"/>
                     </td>
+                <!--EMAIL-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('email', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="email" class="required email" value="<?php echo $stud->email; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ADDRESS-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('address', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="address" class="required" value="<?php echo $stud->address; ?>"/>
                     </td>
+                <!--CITY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('city', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="city" class="required" value="<?php echo $stud->city; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ONECARD-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('onecard', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="onecard" class="required" value="<?php echo $stud->onecard; ?>"/>
@@ -824,11 +938,13 @@ function initial_edit()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('programinfo', 'local_placement'); ?></span>
             <table>
                 <tr>
+                <!--FRANCOPHONE/IMMERSION-->
                     <td>
                         <div style="margin-top:-20px;"><span style="color:red;">*</span><?php echo get_string('langpro', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio2" name="lang" value="francophone" <?php echo $radio1a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('french', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio2" name="lang" value="immersion" <?php echo $radio1b; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('immersion', 'local_placement'); ?></span></div>
                     </td>
+                <!--ELEMENTARY/SECONDARY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('schoollev', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio3" name="level" value="elementary" style="margin-left:10px;" <?php echo $radio2a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('elementary', 'local_placement'); ?></span><br/>
@@ -842,10 +958,12 @@ function initial_edit()
                     <td/>
                 </tr>
                 <tr>
+                <!--MAJOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('major', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:10px;" name="maj" class="required" value="<?php echo $stud->major; ?>"/>
                     </td>
+                <!--MINOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('minor', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:100px;" name="min" class="required" value="<?php echo $stud->minor; ?>"/>
@@ -857,51 +975,27 @@ function initial_edit()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('pref', 'local_placement'); ?></span>
             <table>
                 <tr>
-                    <td colspan="2">
-                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:
-                        <div style="float:right;margin-right:360px;"><input type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;" <?php echo $radio3a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
-                        <input type="radio" class="radio4" name="type" value="public"  style="margin-left:10px;" <?php echo $radio3b; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('public', 'local_placement'); ?></span><br/>
-                        <input type="radio" class="radio4" name="type" value="doesn't matter"  style="margin-left:10px;"  <?php echo $radio3c; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('nomatter', 'local_placement'); ?></span></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <br/><hr/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <span style="color:red;">*</span><?php echo get_string('rural', 'local_placement'); ?>:
-                        <input id="yes" type="radio" class="radio5" name="rural" value="y" style="margin-left:20px;" <?php echo $radio4a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
-                        <input type="radio" class="radio5" name="rural" value="n" style="margin-left:10px;" <?php echo $radio4b; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('no', 'local_placement'); ?></span>
-                    </td>
-                </tr>
-                <tr>
+                <!--CATHOLIC/PUBLIC-->
                     <td>
-                        <br/><span style="margin-left:20px;font-weight:bold;">-  <?php echo get_string('ifyes', 'local_placement'); ?>:</span>
+                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:<br/><br/>
+                        <div style=""><input <?php echo $radio3a; ?> type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
+                        <input <?php echo $radio3b; ?> type="radio" class="radio4" name="type" value="public"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('public', 'local_placement'); ?></span><br/>
+                        <input <?php echo $radio3c; ?> type="radio" class="radio4" name="type" value="doesn't matter"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('nomatter', 'local_placement'); ?></span></div>
                     </td>
-                </tr>
-                <tr>
+                <!--CORE SUBJECT PREFERENCE-->
                     <td>
-                        <br/><p><span class="show" style="color:red;display:none;">*</span><?php echo get_string('location', 'local_placement'); ?>:<span>    </span><input name="location" type="text" value="<?php echo $stud->rural_location; ?>"/></p>
+                        <?php echo get_string('subject', 'local_placement'); ?><br/><br/>
+                        <select name="core">
+                            <option <?php echo $select1; ?> value="none"><?php echo get_string('nomatter', 'local_placement'); ?></option>
+                            <option <?php echo $select2; ?> value="language arts"><?php echo get_string('la', 'local_placement'); ?></option>
+                            <option <?php echo $select3; ?> value="math"><?php echo get_string('math', 'local_placement'); ?></option>
+                            <option <?php echo $select4; ?> value="science"><?php echo get_string('science', 'local_placement'); ?></option>
+                            <option <?php echo $select5; ?> value="social studies"><?php echo get_string('social', 'local_placement'); ?></option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"><br/>
-                        <span class="show" style="color:red;display:none;">*</span><?php echo get_string('scholarship', 'local_placement'); ?>:
-                        <input type="radio" class="radio6" name="scholarship" value="y" style="margin-left:30px;" <?php echo $radio5a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
-                        <input type="radio" class="radio6" name="scholarship" value="n"  style="margin-left:10px;" <?php echo $radio5b; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('no', 'local_placement'); ?></span><br/>
-                        <b><?php echo get_string('scholdetail', 'local_placement'); ?></b>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"><br/>
-                        <span class="show" style="color:red;display:none;">*</span><?php echo get_string('housing', 'local_placement'); ?>:
-                        <input type="radio" class="radio7" name="housing" value="y" style="margin-left:30px;" <?php echo $radio6a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
-                        <input type="radio" class="radio7" name="housing" value="n"  style="margin-left:10px;" <?php echo $radio6b; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('no', 'local_placement'); ?></span>
-                    </td>
-                </tr>
-                <tr>
+                <!--SPECIFIC SCHOOL PREFERENCE-->
                     <td colspan="2"><br/><hr/><br/>
                         <?php echo get_string('specific', 'local_placement'); ?>:<br/><br/>
                         <select id="specific_preference" class="<?php echo $stud->specific_preference; ?>" name="specific">
@@ -918,6 +1012,7 @@ function initial_edit()
                     </td>
                 </tr>
                 <tr>
+                <!--OTHER PREFERENCES-->
                     <td colspan="2"><br/><hr/><br/>
                         <?php echo get_string('otherinfo', 'local_placement'); ?><br/><br/>
                         <textarea name="pref" cols="110" rows="10" style="resize:none;"><?php echo $stud->preferences; ?></textarea>
@@ -940,12 +1035,22 @@ function initial_edit()
     <?php
 }
 
+
+/**
+* Form for adding a teacher
+*
+* @global moodle_database $DB
+* @global stdClass $USER
+* @global stdClass $CFG
+**/
 function stage1_edit()
 {
     global $DB, $CFG, $USER;
     $std = $DB->get_record('user', array('id' => $USER->id));
     $stud = $DB->get_record('placement_stage1', array("email" => $std->email));
     $schools = $DB->get_records('placement_school', array(), 'school');
+    
+    //These if statements determine which radio buttons and checkboxes to fill
     
     $radio1a = '';
     $radio1b = '';
@@ -1037,12 +1142,52 @@ function stage1_edit()
         $radio6a = 'checked="checked"';
         $radio6b = '';
     }
-    else if($stud->rural_scholarship == 'n')
+    else if($stud->rural_accomidation == 'n')
     {
         $radio6a = '';
         $radio6b = 'checked="checked"';
     }
+    
+    switch($stud->subject_preference)
+    {
+        case 'none':
+            $select1 = 'selected=selected';
+            $select2 = '';
+            $select3 = '';
+            $select4 = '';
+            $select5 = '';
+            break;
+        case 'language arts':
+            $select1 = '';
+            $select2 = 'selected=selected';
+            $select3 = '';
+            $select4 = '';
+            $select5 = '';
+            break;
+        case 'math':
+            $select1 = '';
+            $select2 = '';
+            $select3 = 'selected=selected';
+            $select4 = '';
+            $select5 = '';
+            break;
+        case 'science':
+            $select1 = '';
+            $select2 = '';
+            $select3 = '';
+            $select4 = 'selected=selected';
+            $select5 = '';
+            break;
+        case 'social studies':
+            $select1 = '';
+            $select2 = '';
+            $select3 = '';
+            $select4 = '';
+            $select5 = 'selected=selected';
+            break;
+    }
     ?>
+    <!--FORM PROVIDES VALIDATION - REQUIRED FIELDS MUST BE FILLED-->
     <form class="required-form" name="newstudent" id="newstudent">
     <div class="center" style="width:900px;">
     </div>
@@ -1054,40 +1199,48 @@ function stage1_edit()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('personal', 'local_placement'); ?></span>
             <table id="alert" class="<?php echo get_string('required', 'local_placement'); ?>">
                 <tr id="saved" class="<?php echo get_string('usersaved', 'local_placement'); ?>">
+                <!--FIRSTNAME-->
                     <td id="cfg" class="<?php echo $CFG->wwwroot; ?>">
                         <span style="color:red;">*</span><?php echo get_string('firstname', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="firstname" class="required" value="<?php echo $stud->firstname; ?>"/>
                     </td>
+                <!--LASTNAME-->
                     <td id="onealert" class="0">
                         <span style="color:red;">*</span><?php echo get_string('lastname', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="lastname" class="required" value="<?php echo $stud->lastname; ?>"/>
                     </td>
                 </tr>
                 <tr id="studentid" class="<?php echo $stud->student_teacher_id; ?>">
+                <!--PHONE NUMBER-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('phone', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="phone" class="required" value="<?php echo $stud->phone; ?>"/>
                     </td>
+                <!--EMAIL-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('email', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="email" class="required email" value="<?php echo $stud->email; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ADDRESS-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('address', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="address" class="required" value="<?php echo $stud->address; ?>"/>
                     </td>
+                <!--CITY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('city', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="city" class="required" value="<?php echo $stud->city; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ONECARD-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('onecard', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="onecard" class="required" value="<?php echo $stud->onecard; ?>"/>
                     </td>
+                <!--VEHICLE-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('vehicle', 'local_placement'); ?>:
                         <?php
@@ -1118,11 +1271,13 @@ function stage1_edit()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('programinfo', 'local_placement'); ?></span>
             <table>
                 <tr>
+                <!--FRANCOPHONE/IMMERSION-->
                     <td>
                         <div style="margin-top:-20px;"><span style="color:red;">*</span><?php echo get_string('langpro', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio2" name="lang" value="francophone" <?php echo $radio1a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('french', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio2" name="lang" value="immersion" <?php echo $radio1b; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('immersion', 'local_placement'); ?></span></div>
                     </td>
+                <!--ELEMENTARY/SECONDARY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('schoollev', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio3" name="level" value="elementary" style="margin-left:10px;" <?php echo $radio2a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('elementary', 'local_placement'); ?></span><br/>
@@ -1136,10 +1291,12 @@ function stage1_edit()
                     <td/>
                 </tr>
                 <tr>
+                <!--MAJOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('major', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:10px;" name="maj" class="required" value="<?php echo $stud->major; ?>"/>
                     </td>
+                <!--MINOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('minor', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:100px;" name="min" class="required" value="<?php echo $stud->minor; ?>"/>
@@ -1151,11 +1308,23 @@ function stage1_edit()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('pref', 'local_placement'); ?></span>
             <table>
                 <tr>
-                    <td colspan="2">
-                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:
-                        <div style="float:right;margin-right:360px;"><input type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;" <?php echo $radio3a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
-                        <input type="radio" class="radio4" name="type" value="public"  style="margin-left:10px;" <?php echo $radio3b; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('public', 'local_placement'); ?></span><br/>
-                        <input type="radio" class="radio4" name="type" value="doesn't matter"  style="margin-left:10px;"  <?php echo $radio3c; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('nomatter', 'local_placement'); ?></span></div>
+                <!--CATHOLIC/PUBLIC-->
+                    <td>
+                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:<br/><br/>
+                        <div style=""><input <?php echo $radio3a; ?> type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
+                        <input <?php echo $radio3b; ?> type="radio" class="radio4" name="type" value="public"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('public', 'local_placement'); ?></span><br/>
+                        <input <?php echo $radio3c; ?> type="radio" class="radio4" name="type" value="doesn't matter"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('nomatter', 'local_placement'); ?></span></div>
+                    </td>
+                <!--CORE SUBJECT PREFERENCE-->
+                    <td>
+                        <?php echo get_string('subject', 'local_placement'); ?><br/><br/>
+                        <select name="core">
+                            <option <?php echo $select1; ?> value="none"><?php echo get_string('nomatter', 'local_placement'); ?></option>
+                            <option <?php echo $select2; ?> value="language arts"><?php echo get_string('la', 'local_placement'); ?></option>
+                            <option <?php echo $select3; ?> value="math"><?php echo get_string('math', 'local_placement'); ?></option>
+                            <option <?php echo $select4; ?> value="science"><?php echo get_string('science', 'local_placement'); ?></option>
+                            <option <?php echo $select5; ?> value="social studies"><?php echo get_string('social', 'local_placement'); ?></option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
@@ -1164,6 +1333,7 @@ function stage1_edit()
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL PLACEMENT YES/NO-->
                     <td colspan="2">
                         <span style="color:red;">*</span><?php echo get_string('rural', 'local_placement'); ?>:
                         <input id="yes" type="radio" class="radio5" name="rural" value="y" style="margin-left:20px;" <?php echo $radio4a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
@@ -1176,11 +1346,13 @@ function stage1_edit()
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL LOCATION-->
                     <td>
                         <br/><p><span class="show" style="color:red;display:none;">*</span><?php echo get_string('location', 'local_placement'); ?>:<span>    </span><input name="location" type="text" value="<?php echo $stud->rural_location; ?>"/></p>
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL SCHOLARSHIP YES/NO-->
                     <td colspan="2"><br/>
                         <span class="show" style="color:red;display:none;">*</span><?php echo get_string('scholarship', 'local_placement'); ?>:
                         <input type="radio" class="radio6" name="scholarship" value="y" style="margin-left:30px;" <?php echo $radio5a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
@@ -1189,6 +1361,7 @@ function stage1_edit()
                     </td>
                 </tr>
                 <tr>
+                <!--RURAL HOUSING ACCOMMODATION YES/NO-->
                     <td colspan="2"><br/>
                         <span class="show" style="color:red;display:none;">*</span><?php echo get_string('housing', 'local_placement'); ?>:
                         <input type="radio" class="radio7" name="housing" value="y" style="margin-left:30px;" <?php echo $radio6a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('yes', 'local_placement'); ?></span>
@@ -1196,6 +1369,7 @@ function stage1_edit()
                     </td>
                 </tr>
                 <tr>
+                <!--SPECIFIC SCHOOL PREFERENCE-->
                     <td colspan="2"><br/><hr/><br/>
                         <?php echo get_string('specific', 'local_placement'); ?>:<br/><br/>
                         <select id="specific_preference" class="<?php echo $stud->specific_preference; ?>" name="specific">
@@ -1212,6 +1386,7 @@ function stage1_edit()
                     </td>
                 </tr>
                 <tr>
+                <!--OTHER PREFERENCES-->
                     <td colspan="2"><br/><hr/><br/>
                         <?php echo get_string('otherinfo', 'local_placement'); ?><br/><br/>
                         <textarea name="pref" cols="110" rows="10" style="resize:none;"><?php echo $stud->preferences; ?></textarea>
@@ -1223,17 +1398,20 @@ function stage1_edit()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('first', 'local_placement'); ?></span>
             <table>
                 <tr>
+                <!--EDU STAGE TEACHER NAME-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('teachername', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:120px;" name="teacher" class="required" value="<?php echo $stud->initial_teacher; ?>"/>
+                        <input type="text" style="float:right;width:120px;" name="teacher" class="required" value="<?php echo $stud->initial_stage_teacher; ?>"/>
                     </td>
+                <!--EDU STAGE SCHOOL NAME-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('school', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:120px;" name="school" class="required" value="<?php echo $stud->initial_school; ?>"/>
+                        <input type="text" style="float:right;width:120px;" name="school" class="required" value="<?php echo $stud->initial_stage_school; ?>"/>
                     </td>
+                <!--EDU STAGE LEVEL-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('level', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:120px;" name="level2" class="required" value="<?php echo $stud->initial_level; ?>"/>
+                        <input type="text" style="float:right;width:120px;" name="level2" class="required" value="<?php echo $stud->initial_stage_level; ?>"/>
                     </td>
                 </tr>
             </table>
@@ -1253,12 +1431,22 @@ function stage1_edit()
     <?php
 }
 
+
+/**
+* Form for adding a teacher
+*
+* @global moodle_database $DB
+* @global stdClass $USER
+* @global stdClass $CFG
+**/
 function stage2_edit()
 {
     global $DB, $CFG, $USER;
     $std = $DB->get_record('user', array('id' => $USER->id));
     $stud = $DB->get_record('placement_stage2', array("email" => $std->email));
     $schools = $DB->get_records('placement_school', array(), 'school');
+    
+    //these if statements determine which radio buttons or checkboxes to fill
     
     $radio1a = '';
     $radio1b = '';
@@ -1350,12 +1538,52 @@ function stage2_edit()
         $radio6a = 'checked="checked"';
         $radio6b = '';
     }
-    else if($stud->rural_scholarship == 'n')
+    else if($stud->rural_accomidation == 'n')
     {
         $radio6a = '';
         $radio6b = 'checked="checked"';
     }
+    
+    switch($stud->subject_preference)
+    {
+        case 'none':
+            $select1 = 'selected=selected';
+            $select2 = '';
+            $select3 = '';
+            $select4 = '';
+            $select5 = '';
+            break;
+        case 'language arts':
+            $select1 = '';
+            $select2 = 'selected=selected';
+            $select3 = '';
+            $select4 = '';
+            $select5 = '';
+            break;
+        case 'math':
+            $select1 = '';
+            $select2 = '';
+            $select3 = 'selected=selected';
+            $select4 = '';
+            $select5 = '';
+            break;
+        case 'science':
+            $select1 = '';
+            $select2 = '';
+            $select3 = '';
+            $select4 = 'selected=selected';
+            $select5 = '';
+            break;
+        case 'social studies':
+            $select1 = '';
+            $select2 = '';
+            $select3 = '';
+            $select4 = '';
+            $select5 = 'selected=selected';
+            break;
+    }
     ?>
+    <!--FORM PROVIDES VALIDATION - REQUIRED FIELDS MUST BE FILLED-->
     <form class="required-form" name="newstudent" id="newstudent">
     <div class="center" style="width:900px;">
     </div>
@@ -1367,40 +1595,48 @@ function stage2_edit()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('personal', 'local_placement'); ?></span>
             <table id="alert" class="<?php echo get_string('required', 'local_placement'); ?>">
                 <tr id="saved" class="<?php echo get_string('usersaved', 'local_placement'); ?>">
+                <!--FIRSTNAME-->
                     <td id="cfg" class="<?php echo $CFG->wwwroot; ?>">
                         <span style="color:red;">*</span><?php echo get_string('firstname', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="firstname" class="required" value="<?php echo $stud->firstname; ?>"/>
                     </td>
+                <!--LASTNAME-->
                     <td id="onealert" class="0">
                         <span style="color:red;">*</span><?php echo get_string('lastname', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="lastname" class="required" value="<?php echo $stud->lastname; ?>"/>
                     </td>
                 </tr>
                 <tr id="studentid" class="<?php echo $stud->student_teacher_id; ?>">
+                <!--PHONE NUMBER-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('phone', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="phone" class="required" value="<?php echo $stud->phone; ?>"/>
                     </td>
+                <!--EMAIL-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('email', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="email" class="required email" value="<?php echo $stud->email; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ADDRESS-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('address', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="address" class="required" value="<?php echo $stud->address; ?>"/>
                     </td>
+                <!--CITY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('city', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="city" class="required" value="<?php echo $stud->city; ?>"/>
                     </td>
                 </tr>
                 <tr>
+                <!--ONECARD-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('onecard', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:50px;" name="onecard" class="required" value="<?php echo $stud->onecard; ?>"/>
                     </td>
+                <!--VEHICLE-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('vehicle', 'local_placement'); ?>:
                         <?php
@@ -1431,11 +1667,13 @@ function stage2_edit()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('programinfo', 'local_placement'); ?></span>
             <table>
                 <tr>
+                <!--FRANCOPHONE/IMMERSION-->
                     <td>
                         <div style="margin-top:-20px;"><span style="color:red;">*</span><?php echo get_string('langpro', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio2" name="lang" value="francophone" <?php echo $radio1a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('french', 'local_placement'); ?></span><br/>
                         <input type="radio" class="radio2" name="lang" value="immersion" <?php echo $radio1b; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('immersion', 'local_placement'); ?></span></div>
                     </td>
+                <!--ELEMENTARY/SECONDARY-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('schoollev', 'local_placement'); ?>:
                         <div class="move" style="float:right;margin-right:30px;"><input type="radio" class="radio3" name="level" value="elementary" style="margin-left:10px;" <?php echo $radio2a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('elementary', 'local_placement'); ?></span><br/>
@@ -1449,10 +1687,12 @@ function stage2_edit()
                     <td/>
                 </tr>
                 <tr>
+                <!--MAJOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('major', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:10px;" name="maj" class="required" value="<?php echo $stud->major; ?>"/>
                     </td>
+                <!--MINOR-->
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('minor', 'local_placement'); ?>:
                         <input type="text" style="float:right;width:166px;margin-right:100px;" name="min" class="required" value="<?php echo $stud->minor; ?>"/>
@@ -1464,11 +1704,23 @@ function stage2_edit()
             <span class="whitetitle" style="top:-17px;"><?php echo get_string('pref', 'local_placement'); ?></span>
             <table>
                 <tr>
-                    <td colspan="2">
-                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:
-                        <div style="float:right;margin-right:360px;"><input type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;" <?php echo $radio3a; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
-                        <input type="radio" class="radio4" name="type" value="public"  style="margin-left:10px;" <?php echo $radio3b; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('public', 'local_placement'); ?></span><br/>
-                        <input type="radio" class="radio4" name="type" value="doesn't matter"  style="margin-left:10px;"  <?php echo $radio3c; ?>/><span style="font-weight:bold;"><?php echo ' ' . get_string('nomatter', 'local_placement'); ?></span></div>
+                <!--CATHOLIC/PREFERENCE-->
+                    <td>
+                        <span style="color:red;">*</span><?php echo get_string('type', 'local_placement'); ?>:<br/><br/>
+                        <div style=""><input <?php echo $radio3a; ?> type="radio" class="radio4" name="type" value="catholic" style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('catholic', 'local_placement'); ?></span><br/>
+                        <input <?php echo $radio3b; ?> type="radio" class="radio4" name="type" value="public"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('public', 'local_placement'); ?></span><br/>
+                        <input <?php echo $radio3c; ?> type="radio" class="radio4" name="type" value="doesn't matter"  style="margin-left:10px;"/><span style="font-weight:bold;"><?php echo ' ' . get_string('nomatter', 'local_placement'); ?></span></div>
+                    </td>
+                <!--CORE SUBJECT PREFERENCES-->
+                    <td>
+                        <?php echo get_string('subject', 'local_placement'); ?><br/><br/>
+                        <select name="core">
+                            <option <?php echo $select1; ?> value="none"><?php echo get_string('nomatter', 'local_placement'); ?></option>
+                            <option <?php echo $select2; ?> value="language arts"><?php echo get_string('la', 'local_placement'); ?></option>
+                            <option <?php echo $select3; ?> value="math"><?php echo get_string('math', 'local_placement'); ?></option>
+                            <option <?php echo $select4; ?> value="science"><?php echo get_string('science', 'local_placement'); ?></option>
+                            <option <?php echo $select5; ?> value="social studies"><?php echo get_string('social', 'local_placement'); ?></option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
@@ -1538,15 +1790,15 @@ function stage2_edit()
                 <tr>
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('teachername', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:120px;" name="teacher" class="required" value="<?php echo $stud->initial_teacher; ?>"/>
+                        <input type="text" style="float:right;width:120px;" name="teacher" class="required" value="<?php echo $stud->initial_stage_teacher; ?>"/>
                     </td>
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('school', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:120px;" name="school" class="required" value="<?php echo $stud->initial_school; ?>"/>
+                        <input type="text" style="float:right;width:120px;" name="school" class="required" value="<?php echo $stud->initial_stage_school; ?>"/>
                     </td>
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('level', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:120px;" name="level2" class="required" value="<?php echo $stud->initial_level; ?>"/>
+                        <input type="text" style="float:right;width:120px;" name="level2" class="required" value="<?php echo $stud->initial_stage_level; ?>"/>
                     </td>
                 </tr>
             </table>
@@ -1557,15 +1809,15 @@ function stage2_edit()
                 <tr>
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('teachername', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:120px;" name="teacher2" class="required"/>
+                        <input type="text" style="float:right;width:120px;" name="teacher2" class="required" value="<?php echo $stud->stage1_teacher; ?>"/>
                     </td>
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('school', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:120px;" name="school2" class="required"/>
+                        <input type="text" style="float:right;width:120px;" name="school2" class="required" value="<?php echo $stud->stage1_school; ?>"/>
                     </td>
                     <td>
                         <span style="color:red;">*</span><?php echo get_string('level', 'local_placement'); ?>:
-                        <input type="text" style="float:right;width:120px;" name="level3" class="required"/>
+                        <input type="text" style="float:right;width:120px;" name="level3" class="required" value="<?php echo $stud->stage1_level; ?>"/>
                     </td>
                 </tr>
             </table>

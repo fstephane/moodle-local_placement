@@ -33,7 +33,7 @@
 defined('MOODLE_INTERNAL') || die();
 
         // The current plugin version (Date: YYYYMMDDXX)
-$plugin->version   = 2012081603;
+$plugin->version   = 2012082203;
 $plugin->requires = 2010112400; //Moodle 2.0 = 2010112400; Moodle 2.1 = 2011070100; Moodle 2.2 = 2011120100; Moodle 2.3 = 2012062500
 $plugin->maturity = MATURITY_BETA; // Change the maturity in function of the plugin. MATURITY_ALPHA / MATURITY_BETA / MATURITY_RC / MATURITY_STABLE
 $plugin->release = '0.1.0 (Build: 2012081603)'; //Replace 0.0.0 with the actual version of your plugin. Replace the YYYYMMDDVV with the version of the plugin

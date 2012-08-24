@@ -29,15 +29,21 @@
 **************************************************************************
 **************************************************************************/
 
+//This page takes care of all the principal's features
+//if viewprincipal.php?view=admin, admin page is displayed
+//if viewprincipal.php?view=editschool, school editing form is displayed
+//if viewprincipal.php?view=add, add teacher form is displayed
+//if viewprincipal.php?view=edit, edit teacher form is displayed
+
 require('../config.php');
-require('../lib/lib.php');
+require('../lib/libprincipal.php');
 
 global $DB, $CFG, $USER;
 
 require_login(1, true);
 $context = get_context_instance(CONTEXT_USER, $USER->id);
 
-$PAGE->set_url($CFG->wwwroot.'/local/placement/admin/view.php');
+$PAGE->set_url($CFG->wwwroot.'/local/placement/user/viewprincipal.php');
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title(get_string('placement', 'local_placement'));
@@ -45,34 +51,52 @@ $PAGE->set_heading(get_string('placement', 'local_placement'));
 
 $PAGE->requires->js('/local/placement/js/jquery.js');
 $PAGE->requires->js('/local/placement/js/jquery.min.js');
-$PAGE->requires->js('/local/placement/js/scriptadmin.js');
+$PAGE->requires->js('/local/placement/js/scriptprincipal.js');
 $PAGE->requires->js('/local/placement/js/validate.js');
 $PAGE->requires->js('/local/placement/js/jquery.ui.js');
-$PAGE->requires->js('/local/placement/js/jquery.ui.draggable.min.js');
-$PAGE->requires->js('/local/placement/js/jquery.ui.droppable.min.js');
 $PAGE->requires->css('/local/placement/css/style.css');
 $PAGE->requires->css('/local/placement/css/jquery.ui.css');
 $PAGE->requires->css('/local/placement/css/validate.css');
         
-//echo '<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>';
 echo $OUTPUT->header();
 
-//$DB->delete_records('placement_student_teacher', array("id" => 433));
-//$DB->delete_records('placement_users', array("id" => 6));
-//$DB->delete_records('user', array("id" => 60));
+//if principal is in the placement_users table, then continue
+if($DB->get_record('placement_users', array("userid" => $USER->id)))
+{
+    //If principal has not yet been confirmed, open the dialog box where they can enter their information
+    if($DB->get_record('placement_users', array("userid" => $USER->id, "confirmed" => 0)))
+    {
+        dialog();
+    }
+    else
+    {
+        $view = optional_param('view', '0', PARAM_TEXT);
 
-if (!has_capability('local/placement:manage',$context)) {
-        print_string('norights','local_placement');
-        } else {
-        $view = optional_param('view', '0', PARAM_TEXT);    
-            
-        if($view == 'admin')
-            admin_tool();
-        else if($view == 'tool')
-            placement();
-
-        echo '<span id="null" style="display:none;"></span>';
+        if($view !== '0')
+        {
+            if($view == 'admin')        //admin page
+            {
+                admin_view();
+            }
+            else if($view == 'editschool')  //edit school form
+            {
+                edit_school_view();
+            }
+            else if($view == 'add')     //add teacher form
+            {
+                add_view();
+            }
+            else if($view == 'edit')    //edit teacher form
+            {
+                $id = optional_param('id', '0', PARAM_INT);
+                edit_view($id);
+            }
+            //Null element for loading ajax calls without returns
+            echo '<span id="null" style="display:none;"></span>';
+        }   
+    }
 }
+else
+    echo 'Not in database';
 echo $OUTPUT->footer();
-
 ?>

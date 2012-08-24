@@ -29,18 +29,23 @@
 **************************************************************************
 **************************************************************************/
 
+
+//This page deals with all the requests from viewuser.php
+
+
 require_once('../../../config.php');
 require_login(1, true);
 
 global $DB, $CFG, $USER;
 
-$choose = optional_param('choose', '0', PARAM_TEXT);
-$reg = optional_param('reg', '0', PARAM_TEXT);
-$reg2 = optional_param('reg2', '0', PARAM_TEXT);
-$reg3 = optional_param('reg3', '0', PARAM_TEXT);
-$rs = optional_param('rs', '0', PARAM_INT);
+$choose = optional_param('choose', '0', PARAM_TEXT);    //Updates placement_students with their selected stage
+$reg = optional_param('reg', '0', PARAM_TEXT);          //register an EDU stage student teacher
+$reg2 = optional_param('reg2', '0', PARAM_TEXT);        //register a Stage 1 student teacher
+$reg3 = optional_param('reg3', '0', PARAM_TEXT);        //register a Stage 2 student teacher
+$rs = optional_param('rs', '0', PARAM_INT);             //Delete registration in order to change stage
 
 
+//Delete registration in order to change stage
 if($rs !== '0')
 {
     $stid = optional_param('stid', '0', PARAM_INT);
@@ -60,6 +65,7 @@ if($rs !== '0')
 }
 
 
+//Updates placement_students with their selected stage
 if($choose !== '0')
 {
     $stud = $DB->get_record('user', array("id" => $USER->id));
@@ -77,17 +83,17 @@ if($choose !== '0')
 }
 
 
+//register an EDU stage student teacher
 if($reg !== '0')
 {
-    $rur = optional_param('rur', '0', PARAM_INT);
-    $spec = optional_param('spec', '0', PARAM_INT);
-    $prefer = optional_param('prefer', '0', PARAM_INT);
-    $edit = optional_param('edit', '0', PARAM_TEXT);
-    $stid = optional_param('stid', '0', PARAM_INT);
+    $spec = optional_param('spec', '0', PARAM_INT);         //If 1, it shows that student has indicated a specific school preference
+    $prefer = optional_param('prefer', '0', PARAM_INT);     //If 1, shows that student has indicated preferences
+    $edit = optional_param('edit', '0', PARAM_TEXT);        //If 1, shows that student is editing information and not registering for the first time
+    $stid = optional_param('stid', '0', PARAM_INT);         //student_teacher_id
     
-    $regi = urldecode($reg);
+    $regi = urldecode($reg);        //Decode string of information
     
-    $regis = explode('|', $regi);
+    $regis = explode('|', $regi);   //Explode string into array
     
     $record = new stdClass();
     $record->stage = 'EDU E 331';
@@ -104,72 +110,39 @@ if($reg !== '0')
     $record->major = $regis[10];
     $record->minor = $regis[11];
     $record->schooltype = $regis[12];
-    $record->rural_placement = $regis[13];
+    $record->subject_preference = $regis[13];
     
+    //Check which optional fields were filled out
+    if(($spec !== '0') && ($pref == '0'))
+        $record->specific_preference = $regis[14];
+    else if(($spec == '0') && ($pref !== '0'))
+        $record->preferences = $regis[14];
+    else if(($spec !== '0') && ($pref !== '0'))
+    {
+        $record->specific_preference = $regis[14];
+        $record->preferences = $regis[15];
+    }
+    
+    //Generates a student teacher id that has not already been taken
     $studentid = 1;
         while($DB->get_record('placement_initial', array('student_teacher_id' => $studentid)))
             $studentid++;
         
     $record->student_teacher_id = $studentid;
     
-    if($rur !== 0)
-    {
-        if(($spec !== 0) && ($prefer !== 0))
-        {
-            $record->rural_location = $regis[14];
-            $record->rural_scholarship = $regis[15];
-            $record->rural_accomidation = $regis[16];
-            $record->specific_preference = $regis[17];
-            $record->preferences = $regis[18];
-        }
-        else if(($spec !== 0) && ($prefer == 0))
-        {
-            $record->rural_location = $regis[14];
-            $record->rural_scholarship = $regis[15];
-            $record->rural_accomidation = $regis[16];
-            $record->specific_preference = $regis[17];
-        }
-        else if(($spec == 0) && ($prefer !== 0))
-        {
-            $record->rural_location = $regis[14];
-            $record->rural_scholarship = $regis[15];
-            $record->rural_accomidation = $regis[16];
-            $record->preferences = $regis[17];
-        }
-        else
-        {
-            $record->rural_location = $regis[14];
-            $record->rural_scholarship = $regis[15];
-            $record->rural_accomidation = $regis[16];
-        }
-    }
-    else
-    {
-        if(($spec !== 0) && ($prefer !== 0))
-        {
-            $record->specific_preference = $regis[14];
-            $record->preferences = $regis[15];
-        }
-        else if(($spec !== 0) && ($prefer == 0))
-        {
-            $record->specific_preference = $regis[14];
-        }
-        else if(($spec == 0) && ($prefer !== 0))
-        {
-            $record->preferences = $regis[14];
-        }
-    }
-    
+    //Check if student is editing info or registering for the first time
     if($edit == 'false')
         $DB->insert_record('placement_initial', $record);
     else if($edit == 'true')
     {
         $ssid = $DB->get_record('placement_initial', array('student_teacher_id' => $stid));
         $record->id = $ssid->id;
+        $record->student_teacher_id = $ssid->student_teacher_id;
         
         $DB->update_record('placement_initial', $record);
     }
 
+    //update placement_students
     $studid = $DB->get_record('placement_students', array("userid" => $USER->id));
     $insert = new stdClass();
     $insert->id = $studid->id;
@@ -179,17 +152,18 @@ if($reg !== '0')
 }
 
 
+//register a Stage 1 student teacher
 if($reg2 !== '0')
 {
-    $rur = optional_param('rur', '0', PARAM_INT);
-    $spec = optional_param('spec', '0', PARAM_INT);
-    $prefer = optional_param('prefer', '0', PARAM_INT);
-    $edit = optional_param('edit', '0', PARAM_TEXT);
-    $stid = optional_param('stid', '0', PARAM_INT);
+    $rur = optional_param('rur', '0', PARAM_INT);           //If 1, shows that student has indicated they prefer a rural placement           
+    $spec = optional_param('spec', '0', PARAM_INT);         //If 1, it shows that student has indicated a specific school preference      
+    $prefer = optional_param('prefer', '0', PARAM_INT);     //If 1, shows that student has indicated preferences    
+    $edit = optional_param('edit', '0', PARAM_TEXT);        //If 1, shows that student is editing information and not registering for the first time
+    $stid = optional_param('stid', '0', PARAM_INT);         //student_teacher_id
     
-    $regi = urldecode($reg2);
+    $regi = urldecode($reg2);       //Decode string of information
     
-    $regis = explode('|', $regi);
+    $regis = explode('|', $regi);   //Explode string into array
     
     $record = new stdClass();
     $record->stage = 'Stage 1';
@@ -206,76 +180,82 @@ if($reg2 !== '0')
     $record->major = $regis[10];
     $record->minor = $regis[11];
     $record->schooltype = $regis[12];
-    $record->rural_placement = $regis[13];
-    $record->initial_stage_teacher = $regis[14];
-    $record->initial_stage_school = $regis[15];
-    $record->initial_stage_level = $regis[16];
+    $record->subject_preference = $regis[13];
+    $record->rural_placement = $regis[14];
+    $record->initial_stage_teacher = $regis[15];
+    $record->initial_stage_school = $regis[16];
+    $record->initial_stage_level = $regis[17];
     
+    //Generates a student teacher id that has not already been taken
     $studentid = 1;
         while(($DB->get_record('placement_initial', array('student_teacher_id' => $studentid))) || ($DB->get_record('placement_stage1', array('student_teacher_id' => $studentid))) || ($DB->get_record('placement_stage2', array('student_teacher_id' => $studentid))))
             $studentid++;
         
     $record->student_teacher_id = $studentid;
     
+    //Check to see which optional fields were filled out
     if($rur !== 0)
     {
         if(($spec !== 0) && ($prefer !== 0))
         {
-            $record->rural_location = $regis[17];
-            $record->rural_scholarship = $regis[18];
-            $record->rural_accomidation = $regis[19];
-            $record->specific_preference = $regis[20];
-            $record->preferences = $regis[21];
+            $record->rural_location = $regis[18];
+            $record->rural_scholarship = $regis[19];
+            $record->rural_accomidation = $regis[20];
+            $record->specific_preference = $regis[21];
+            $record->preferences = $regis[22];
         }
         else if(($spec !== 0) && ($prefer == 0))
         {
-            $record->rural_location = $regis[17];
-            $record->rural_scholarship = $regis[18];
-            $record->rural_accomidation = $regis[19];
-            $record->specific_preference = $regis[20];
+            $record->rural_location = $regis[18];
+            $record->rural_scholarship = $regis[19];
+            $record->rural_accomidation = $regis[20];
+            $record->specific_preference = $regis[21];
         }
         else if(($spec == 0) && ($prefer !== 0))
         {
-            $record->rural_location = $regis[17];
-            $record->rural_scholarship = $regis[18];
-            $record->rural_accomidation = $regis[19];
-            $record->preferences = $regis[20];
+            $record->rural_location = $regis[18];
+            $record->rural_scholarship = $regis[19];
+            $record->rural_accomidation = $regis[20];
+            $record->preferences = $regis[21];
         }
         else
         {
-            $record->rural_location = $regis[17];
-            $record->rural_scholarship = $regis[18];
-            $record->rural_accomidation = $regis[19];
+            $record->rural_location = $regis[18];
+            $record->rural_scholarship = $regis[19];
+            $record->rural_accomidation = $regis[20];
         }
     }
     else
     {
         if(($spec !== 0) && ($prefer !== 0))
         {
-            $record->specific_preference = $regis[17];
-            $record->preferences = $regis[18];
+            $record->specific_preference = $regis[18];
+            $record->preferences = $regis[19];
         }
         else if(($spec !== 0) && ($prefer == 0))
         {
-            $record->specific_preference = $regis[17];
+            $record->specific_preference = $regis[18];
         }
         else if(($spec == 0) && ($prefer !== 0))
         {
-            $record->preferences = $regis[17];
+            $record->preferences = $regis[18];
         }
     }
     
+    //Check if student is editing info or registering for the first time
         if($edit == 'false')
             $DB->insert_record('placement_stage1', $record);
         else if($edit == 'true')
         {
             $ssid = $DB->get_record('placement_stage1', array('student_teacher_id' => $stid));
             $record->id = $ssid->id;
+            $record->student_teacher_id = $ssid->student_teacher_id;
 
             $DB->update_record('placement_stage1', $record);
         }
         
-        $studid = $DB->get_record('placement_students', array("userid" => $USER->id));
+    //Update placement_students
+    $studid = $DB->get_record('placement_students', array("userid" => $USER->id));
     $insert = new stdClass();
     $insert->id = $studid->id;
     $insert->registered = 1;
@@ -284,17 +264,18 @@ if($reg2 !== '0')
 }
 
 
+//register a Stage 2 student teacher
 if($reg3 !== '0')
 {
-    $rur = optional_param('rur', '0', PARAM_INT);
-    $spec = optional_param('spec', '0', PARAM_INT);
-    $prefer = optional_param('prefer', '0', PARAM_INT);
-    $edit = optional_param('edit', '0', PARAM_TEXT);
-    $stid = optional_param('stid', '0', PARAM_INT);
+    $rur = optional_param('rur', '0', PARAM_INT);           //If 1, shows that student has indicated they prefer a rural placement
+    $spec = optional_param('spec', '0', PARAM_INT);         //If 1, it shows that student has indicated a specific school preference
+    $prefer = optional_param('prefer', '0', PARAM_INT);     //If 1, shows that student has indicated preferences 
+    $edit = optional_param('edit', '0', PARAM_TEXT);        //If 1, shows that student has indicated preferences 
+    $stid = optional_param('stid', '0', PARAM_INT);         //student_teacher_id
     
-    $regi = urldecode($reg3);
+    $regi = urldecode($reg3);       //Decode string of information
     
-    $regis = explode('|', $regi);
+    $regis = explode('|', $regi);   //Explode string into array
     
     $record = new stdClass();
     $record->stage = 'Stage 2';
@@ -311,79 +292,85 @@ if($reg3 !== '0')
     $record->major = $regis[10];
     $record->minor = $regis[11];
     $record->schooltype = $regis[12];
-    $record->rural_placement = $regis[13];
-    $record->initial_stage_teacher = $regis[14];
-    $record->initial_stage_level = $regis[15];
-    $record->initial_stage_school = $regis[16];
-    $record->stage1_teacher = $regis[17];
-    $record->stage1_level = $regis[18];
+    $record->subject_preference = $regis[13];
+    $record->rural_placement = $regis[14];
+    $record->initial_stage_teacher = $regis[15];
+    $record->initial_stage_level = $regis[16];
+    $record->initial_stage_school = $regis[17];
+    $record->stage1_teacher = $regis[18];
     $record->stage1_school = $regis[19];
+    $record->stage1_level = $regis[20];
     
+    //Generate a student id that has not yet been chosen
     $studentid = 1;
         while(($DB->get_record('placement_initial', array('student_teacher_id' => $studentid))) || ($DB->get_record('placement_stage1', array('student_teacher_id' => $studentid))) || ($DB->get_record('placement_stage2', array('student_teacher_id' => $studentid))))
             $studentid++;
         
     $record->student_teacher_id = $studentid;
     
+    //Check to see which optional fields have been filled out
     if($rur !== 0)
     {
         if(($spec !== 0) && ($prefer !== 0))
         {
-            $record->rural_location = $regis[20];
-            $record->rural_scholarship = $regis[21];
-            $record->rural_accomidation = $regis[22];
-            $record->specific_preference = $regis[23];
-            $record->preferences = $regis[24];
+            $record->rural_location = $regis[21];
+            $record->rural_scholarship = $regis[22];
+            $record->rural_accomidation = $regis[23];
+            $record->specific_preference = $regis[24];
+            $record->preferences = $regis[25];
         }
         else if(($spec !== 0) && ($prefer == 0))
         {
-            $record->rural_location = $regis[20];
-            $record->rural_scholarship = $regis[21];
-            $record->rural_accomidation = $regis[22];
-            $record->specific_preference = $regis[23];
+            $record->rural_location = $regis[21];
+            $record->rural_scholarship = $regis[22];
+            $record->rural_accomidation = $regis[23];
+            $record->specific_preference = $regis[24];
         }
         else if(($spec == 0) && ($prefer !== 0))
         {
-            $record->rural_location = $regis[20];
-            $record->rural_scholarship = $regis[21];
-            $record->rural_accomidation = $regis[22];
-            $record->preferences = $regis[23];
+            $record->rural_location = $regis[21];
+            $record->rural_scholarship = $regis[22];
+            $record->rural_accomidation = $regis[23];
+            $record->preferences = $regis[24];
         }
         else
         {
-            $record->rural_location = $regis[20];
-            $record->rural_scholarship = $regis[21];
-            $record->rural_accomidation = $regis[22];
+            $record->rural_location = $regis[21];
+            $record->rural_scholarship = $regis[22];
+            $record->rural_accomidation = $regis[23];
         }
     }
     else
     {
         if(($spec !== 0) && ($prefer !== 0))
         {
-            $record->specific_preference = $regis[20];
-            $record->preferences = $regis[21];
+            $record->specific_preference = $regis[21];
+            $record->preferences = $regis[22];
         }
         else if(($spec !== 0) && ($prefer == 0))
         {
-            $record->specific_preference = $regis[20];
+            $record->specific_preference = $regis[21];
         }
         else if(($spec == 0) && ($prefer !== 0))
         {
-            $record->preferences = $regis[20];
+            $record->preferences = $regis[21];
         }
     }
     
+    //Check if student is editing info or registering for the first time
         if($edit == 'false')
             $DB->insert_record('placement_stage2', $record);
         else if($edit == 'true')
         {
             $ssid = $DB->get_record('placement_stage2', array('student_teacher_id' => $stid));
             $record->id = $ssid->id;
+            $record->student_teacher_id = $ssid->student_teacher_id;
 
             $DB->update_record('placement_stage2', $record);
         }
         
-        $studid = $DB->get_record('placement_students', array("userid" => $USER->id));
+    //Update placement_students
+    $studid = $DB->get_record('placement_students', array("userid" => $USER->id));
     $insert = new stdClass();
     $insert->id = $studid->id;
     $insert->registered = 1;

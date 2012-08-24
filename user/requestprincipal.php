@@ -29,18 +29,36 @@
 **************************************************************************
 **************************************************************************/
 
+
+//This page handles the AJAX calls from viewprincipal.php
+
+
 require_once('../../../config.php');
 require_login(1, true);
 
 global $DB, $CFG, $USER;
 
-$addt = optional_param('addt', '0', PARAM_TEXT);
-$editt = optional_param('editt', '0', PARAM_TEXT);
-$sb = optional_param('sb', '0', PARAM_TEXT);
-$prin = optional_param('prin', '0', PARAM_TEXT);
-$school = optional_param('school', '0', PARAM_TEXT);
+$addt = optional_param('addt', '0', PARAM_TEXT);        //Add a teacher
+$editt = optional_param('editt', '0', PARAM_TEXT);      //Edit a teacher's info
+$sb = optional_param('sb', '0', PARAM_TEXT);            //Displays the school board of an existing school on the new principal dialog box
+$prin = optional_param('prin', '0', PARAM_TEXT);        //Saves information from new principal dialog box
+$school = optional_param('school', '0', PARAM_TEXT);    //Saves school information
+$remove = optional_param('remove', '0', PARAM_INT);     //Remove a teacher
 
+//Remove a teacher
+if($remove !== '0')
+{
+    $email = $DB->get_record('placement_coop_teachers', array("id" => $remove));
+    
+    $user = $DB->get_record('user', array('email' => $email->email));
+    
+    user_delete_user($user);
+    
+    $DB->delete_records('placement_coop_teachers', array("id" => $remove));
+    $DB->delete_records('user', array('email' => $email->email));
+}
 
+//Saves school information
 if($school !== '0')
 {
     $sinfo = urldecode($school);
@@ -72,6 +90,8 @@ if($school !== '0')
     $record->program = $sarray[18];
     $record->website = $sarray[19];
     $record->zone = $sarray[20];
+    $record->school_type = $sarray[21];
+    $record->school_level = $sarray[22];
     
     $DB->update_record('placement_school', $record);
     
@@ -89,7 +109,7 @@ if($school !== '0')
     $DB->update_record('placement_users', $insert);
 }
 
-
+//Saves information from new principal dialog box
 if($prin !== '0')
 {
     $newb = optional_param('newboard', '0', PARAM_INT);
@@ -165,18 +185,20 @@ if($prin !== '0')
     }
 }
 
-
+//Displays the school board of an existing school on the new principal dialog box
 if($sb !== '0')
 {
     $scb = $DB->get_record('placement_school', array('school' => urldecode($sb)), 'schoolboard');
     echo $scb->schoolboard;
 }
 
-
+//Add a teacher
 if($addt !== '0')
 {
     $newt = urldecode($addt);
     $tinfo = explode('|', $newt);
+    
+    $schl = $DB->get_record('placement_users', array('userid' => $USER->id));
     
     $record = new stdClass();
     $record->firstname = $tinfo[0];
@@ -189,6 +211,8 @@ if($addt !== '0')
     $record->preferences = $tinfo[7];
     $record->stage = $tinfo[8];
     $record->semester = $tinfo[9];
+    $record->school = $schl->school;
+    $record->schoolboard = $schl->schoolboard;
     
     $DB->insert_record('placement_coop_teachers', $record);
     
@@ -255,6 +279,7 @@ if($addt !== '0')
     send_confirmation_email($user);
 }
 
+//Edit a teacher's information
 if($editt !== '0')
 {
     $tid = optional_param('tid', '0', PARAM_INT);
@@ -278,6 +303,7 @@ if($editt !== '0')
     $DB->update_record('placement_coop_teachers', $record);
 }
 
+//This function was in an external library, so I copied it here. It does NOT send a confirmation email
 function user_create_user($user) {
     global $DB;
 
@@ -312,5 +338,10 @@ function user_create_user($user) {
 
     return $newuserid;
 
+}
+
+//This function was in an external library, so I copied it here
+function user_delete_user($user) {
+    return delete_user($user);
 }
 ?>

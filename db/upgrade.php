@@ -43,6 +43,21 @@
 // Please do not forget to use upgrade_set_timeout()
 // before any action that may take longer time to finish.
 
+/**
+**************************************************************************
+**                              Plugin Name                             **
+**************************************************************************
+* @package     local                                                    **
+* @subpackage  Plugin                                                   **
+* @name        Plugin                                                   **
+* @copyright   oohoo.biz                                                **
+* @link        http://oohoo.biz                                         **
+* @author      Stephane                                                 **
+* @author      Fagnan                                                   **
+* @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later **
+**************************************************************************
+**************************************************************************/
+
 defined('MOODLE_INTERNAL') || die;
 
 function xmldb_local_placement_upgrade($oldversion) {
@@ -121,53 +136,6 @@ function xmldb_local_placement_upgrade($oldversion) {
             $dbman->create_table($table);
         }
         
-        // Define table placement_initial to be created
-        $table = new xmldb_table('placement_initial');
-
-        // Adding fields to table placement_initial
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('student_teacher_id', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
-        $table->add_field('lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('firstname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('category', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('phone', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('email', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('type', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('program', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('stage', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('schoolboard', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('supervisor', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('semester', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('school', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('coop_teacher_id', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
-        $table->add_field('supervisor_id', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
-        $table->add_field('minor', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('major', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('schoolid', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
-        $table->add_field('coop_lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('coop_firstname', XMLDB_TYPE_CHAR, '133', null, null, null, null);
-        $table->add_field('schoolyear', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('vehicle', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('coop2_id', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
-        $table->add_field('coop2_lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('coop2_firstname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('supervisor_lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('supervisor_firstname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('comments', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('address', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('phone2', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('outside_province', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('mileage_claimed', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
-        $table->add_field('onecard', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
-
-        // Adding keys to table placement_initial
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-
-        // Conditionally launch create table for placement_initial
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        }
-        
         // Define table placement_supervisor to be created
         $table = new xmldb_table('placement_supervisor');
 
@@ -206,26 +174,6 @@ function xmldb_local_placement_upgrade($oldversion) {
             $dbman->create_table($table);
         }
         
-        // Define table placement_users to be created
-        $table = new xmldb_table('placement_users');
-
-        // Adding fields to table placement_users
-        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('firstname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('schoolboard', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('school', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
-        $table->add_field('schoolid', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
-        $table->add_field('userid', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
-
-        // Adding keys to table placement_users
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-
-        // Conditionally launch create table for placement_users
-        if (!$dbman->table_exists($table)) {
-            $dbman->create_table($table);
-        }
-        
         // Define table placement_students to be created
         $table = new xmldb_table('placement_students');
 
@@ -241,6 +189,64 @@ function xmldb_local_placement_upgrade($oldversion) {
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
 
         // Conditionally launch create table for placement_students
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+        
+        // placement savepoint reached
+        upgrade_plugin_savepoint(true, 2012080900, 'local', 'placement');
+    }
+    
+    if ($oldversion < 2012082201) {
+
+        // Define table placement_initial to be created
+        $table = new xmldb_table('placement_initial');
+
+        // Adding fields to table placement_initial
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('student_teacher_id', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('firstname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('category', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('phone', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('email', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('type', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('program', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('stage', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('schoolboard', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('supervisor', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('semester', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('school', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('coop_teacher_id', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('supervisor_id', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('minor', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('major', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('schoolid', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('coop_lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('coop_firstname', XMLDB_TYPE_CHAR, '133', null, null, null, null);
+        $table->add_field('schoolyear', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('vehicle', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('coop2_id', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('coop2_lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('coop2_firstname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('supervisor_lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('supervisor_firstname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('comments', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('address', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('phone2', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('outside_province', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('mileage_claimed', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('onecard', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('subject_preference', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('schooltype', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('specific_preference', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('city', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('preference', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+
+        // Adding keys to table placement_initial
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Conditionally launch create table for placement_initial
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
@@ -291,6 +297,8 @@ function xmldb_local_placement_upgrade($oldversion) {
         $table->add_field('initial_stage_teacher', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
         $table->add_field('initial_stage_level', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
         $table->add_field('initial_stage_school', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('subject_preference', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('city', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
 
         // Adding keys to table placement_stage1
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
@@ -348,6 +356,8 @@ function xmldb_local_placement_upgrade($oldversion) {
         $table->add_field('stage1_teacher', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
         $table->add_field('stage1_level', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
         $table->add_field('stage1_school', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('subject_preference', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('city', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
 
         // Adding keys to table placement_stage2
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
@@ -358,7 +368,111 @@ function xmldb_local_placement_upgrade($oldversion) {
         }
 
         // placement savepoint reached
-        upgrade_plugin_savepoint(true, 2012080900, 'local', 'placement');
+        upgrade_plugin_savepoint(true, 2012082201, 'local', 'placement');
+    }
+        
+        
+    if ($oldversion < 2012082100) {        
+        // Define table placement_users to be created
+        $table = new xmldb_table('placement_users');
+
+        // Adding fields to table placement_users
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('firstname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('schoolboard', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('school', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('schoolid', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('confirmed', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+
+        // Adding keys to table placement_users
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Conditionally launch create table for placement_users
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+        
+        // placement savepoint reached
+        upgrade_plugin_savepoint(true, 2012082100, 'local', 'placement');
+    }
+    
+        if ($oldversion < 2012082200) {
+        
+        // Define table placement_coop_teachers to be created
+        $table = new xmldb_table('placement_coop_teachers');
+
+        // Adding fields to table placement_coop_teachers
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('coopid', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('lastname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('firstname', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('school', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('sin', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('stage', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('fee', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('payment', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('type', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('schoolboard', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('schoolid', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('schoolyear', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('semester', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('email', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('comments', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('subjects', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('sharedstage', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('responsibility', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('teacher2', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('studentteachersub', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('studentteacher1', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('studentteacher2', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('studentteacher3', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('studentteacher4', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('experience', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('levelexp', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('preferences', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+
+        // Adding keys to table placement_coop_teachers
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Conditionally launch create table for placement_coop_teachers
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // placement savepoint reached
+        upgrade_plugin_savepoint(true, 2012082200, 'local', 'placement');
+    }
+    
+    if ($oldversion < 2012082203) {
+
+        // Define table placement_matches to be created
+        $table = new xmldb_table('placement_matches');
+
+        // Adding fields to table placement_matches
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('teacher_first_name', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('teacher_last_name', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('student_first_name', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('student_last_name', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('matches', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('school', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('changed', XMLDB_TYPE_INTEGER, '1', null, null, null, null);
+        $table->add_field('stage', XMLDB_TYPE_CHAR, '1333', null, null, null, null);
+        $table->add_field('student_teacher_id', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+        $table->add_field('coopid', XMLDB_TYPE_INTEGER, '20', null, null, null, null);
+
+        // Adding keys to table placement_matches
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Conditionally launch create table for placement_matches
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // placement savepoint reached
+        upgrade_plugin_savepoint(true, 2012082203, 'local', 'placement');
     }
 
     return true;
